@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .logincontent {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .logintop h1 {
+            margin-bottom: 20px;
+        }
+
+        .loginbottom {
+            text-align: center;
+        }
+
+        .textbox {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .btn {
+            display: block;
+            width: 84%;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .msg {
+            color: red;
+            margin-bottom: 20px;
+        }
+
+        .worddark {
+            color: #000;
+        }
+
+        .worddark a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .worddark a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="logincontent">
+        <div class="logintop">
+            <h1>Login</h1>
+        </div>
+        <div class="loginbottom">
+            <form action="{{ url_for('login') }}" method="post" autocomplete="off">
+                <div class="msg">{{ msg }}</div>
+                <input type="text" name="username" placeholder="Enter Your Username" class="textbox" id="username" required>
+                <input type="password" name="password" placeholder="Enter Your Password" class="textbox" id="password" required>
+                <input type="submit" class="btn" value="Login">
+            </form>
+            <p class="worddark">New to this page? <a class="worddark" href="{{ url_for('register') }}">Register here</a></p>
+        </div>
+    </div>
+</body>
+</html>
