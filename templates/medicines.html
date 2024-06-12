@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medicines</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="content">
+        <div class="topbar">
+            <h1>Available Medicines</h1>
+        </div>
+        <div class="contentbar">
+            <ul>
+                {% for medicine in medicines %}
+                    <li>
+                        <p>{{ medicine['name'] }} - ${{ medicine['price'] }}</p>
+                        <a href="{{ url_for('add_to_cart', medicine_id=medicine['id']) }}">Add to Cart</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p><a href="/cart">View Cart</a></p>
+            <p><a href="/index">Back to Home</a></p>
+        </div>
+    </div>
+</body>
+</html>

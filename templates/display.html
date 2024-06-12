@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="content">
+        <div class="topbar">
+            <h1>Profile</h1>
+        </div>
+        <div class="contentbar">
+            <p>Username: {{ account['username'] }}</p>
+            <p>Email: {{ account['email'] }}</p>
+            <p>Medical Condition: {{ account['medical_condition'] }}</p>
+            <p>Address: {{ account['address'] }}</p>
+            <p>City: {{ account['city'] }}</p>
+            <p>State: {{ account['state'] }}</p>
+            <p>Country: {{ account['country'] }}</p>
+            <p>Postal Code: {{ account['postalcode'] }}</p>
+            <p><a href="/update">Update Profile</a></p>
+            <p><a href="/index">Back to Home</a></p>
+        </div>
+    </div>
+</body>
+</html>

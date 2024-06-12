@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="content">
+        <div class="topbar">
+            <h1>Your Cart</h1>
+        </div>
+        <div class="contentbar">
+            <ul>
+                {% for item in cart_items %}
+                    <li>{{ item['name'] }} - ${{ item['price'] }}</li>
+                {% endfor %}
+            </ul>
+            <p><a href="/checkout">Checkout</a></p>
+            <p><a href="/index">Back to Home</a></p>
+        </div>
+    </div>
+</body>
+</html>

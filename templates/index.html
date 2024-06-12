@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="content">
+        <div class="topbar">
+            <h1>Welcome {{ session['username'] }}</h1>
+        </div>
+        <div class="contentbar">
+            <h2>Medical Delivery System</h2>
+            <p><a href="/medicines">Browse Medicines</a></p>
+            <p><a href="/cart">View Cart</a></p>
+            <p><a href="/orders">Your Orders</a></p>
+            <p><a href="/display">View Profile</a></p>
+            <p><a href="/update">Update Profile</a></p>
+            <p><a href="/logout">Logout</a></p>
+        </div>
+    </div>
+</body>
+</html>

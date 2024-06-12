@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="content">
+        <div class="topbar">
+            <h1>Your Orders</h1>
+        </div>
+        <div class="contentbar">
+            <ul>
+                {% for order in orders %}
+                    <li>{{ order['name'] }} - ${{ order['price'] }}</li>
+                {% endfor %}
+            </ul>
+            <p><a href="/index">Back to Home</a></p>
+        </div>
+    </div>
+</body>
+</html>
