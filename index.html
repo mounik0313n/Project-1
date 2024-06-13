@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #000000; /* Black background */
+            color: #ffffff; /* White text color */
+        }
+
+        .box {
+            background-color: #ffffff; /* White background */
+            padding: 20px;
+            margin-top: 50px; /* Adjust as needed */
+            border-radius: 10px; /* Curved corners */
+        }
+
+        h1 {
+            color: #006400; /* Dark green color */
+        }
+
+        .top-right {
+            margin-top: 20px; /* Adjust as needed */
+        }
+
+        .top-right a {
+            margin-right: 10px; /* Adjust as needed */
+            color: #000000; /* Black text color */
+            background-color: #ffffff; /* White background for links */
+            padding: 8px 16px; /* Adjust as needed */
+            border-radius: 10px; /* Curved corners */
+            text-decoration: none; /* Remove underline */
+        }
+
+        .space-below {
+            margin-top: 20px; /* Adjust as needed */
+        }
+    </style>
+    <title>Lab Tests</title>
+</head>
+<body>
+    <div class="box">
+        <h1>Welcome to the Lab Tests</h1>
+    </div>
+    <div class="box top-right">
+        <a href="{{ url_for('main.login') }}">Log In</a>
+        <a href="{{ url_for('main.signup') }}">Sign Up</a>
+    </div>
+    <div class="box">
+        <a href="{{ url_for('main.tests') }}">View Tests</a>
+    </div>
+</body>
+</html>
