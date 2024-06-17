@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .topbar {
+            background: #512DA8;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .med24 {
+            font-size: 32px;
+            font-weight: bold;
+            font-family: 'Arial Black', Gadget, sans-serif;
+            color: #FFC107;
+            text-transform: uppercase;
+        }
+        .current-time {
+            font-size: 16px;
+            background: #673AB7;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        nav {
+            margin: 0;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        nav ul li {
+            margin: 0;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #673AB7;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav ul li a:hover {
+            background: #9C27B0;
+        }
+        .welcome {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 28px;
+            color: #333;
+        }
+        .content {
+            width: 80%;
+            margin: 20px auto;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .contentbar {
+            background: #fff;
+            padding: 30px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .contentbar h2 {
+            text-align: center;
+            color: #2196F3;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .admin-section {
+            margin: 30px 0;
+        }
+        .admin-section table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .admin-section table, th, td {
+            border: 1px solid #ddd;
+        }
+        .admin-section th, .admin-section td {
+            padding: 10px;
+            text-align: center;
+        }
+        .admin-section th {
+            background-color: #f2f2f2;
+        }
+        .admin-section form {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .admin-section input[type="text"],
+        .admin-section input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        .admin-section input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+        .admin-section input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const dateTimeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+            document.getElementById('current-time').innerText = dateTimeString;
+        }
+
+        setInterval(updateTime, 1000);
+    </script>
+</head>
+<body onload="updateTime()">
+    <div class="topbar">
+        <span class="med24">Med24</span>
+        <nav>
+            <ul>
+                <li><span class="current-time" id="current-time"></span></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="welcome">
+        <h1>Welcome, Admin</h1>
+    </div>
+    <div class="content">
+        <div class="contentbar">
+            <h2>Admin Dashboard</h2>
+            
+            <div class="admin-section">
+                <h3>Manage Medicines</h3>
+                <form action="/add_medicine" method="post">
+                    <input type="text" name="name" placeholder="Medicine Name" required>
+                    <input type="number" name="price" placeholder="Price" required>
+                    <input type="submit" value="Add Medicine">
+                </form>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Medicine items will be rendered here from the server -->
+                        {% for medicine in medicines %}
+                        <tr>
+                            <td>{{ medicine.id }}</td>
+                            <td>{{ medicine.name }}</td>
+                            <td>{{ medicine.price }}</td>
+                            <td>
+                                <form action="/delete_medicine/{{ medicine.id }}" method="post" style="display:inline;">
+                                    <input type="submit" value="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="admin-section">
+                <h3>Manage Orders</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Medicine Name</th>
+                            <th>User</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Order items will be rendered here from the server -->
+                        {% for order in orders %}
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.medicine_name }}</td>
+                            <td>{{ order.username }}</td>
+                            <td>{{ order.price }}</td>
+                            <td>{{ order.status }}</td>
+                            <td>
+                                <form action="/update_order/{{ order.id }}" method="post" style="display:inline;">
+                                    <select name="status">
+                                        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                        <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                                        <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                                    </select>
+                                    <input type="submit" value="Update">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
