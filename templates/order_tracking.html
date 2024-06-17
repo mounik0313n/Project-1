@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Tracking</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .topbar {
+            background: #512DA8;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .med24 {
+            font-size: 32px;
+            font-weight: bold;
+            font-family: 'Arial Black', Gadget, sans-serif;
+            color: #FFC107;
+            text-transform: uppercase;
+        }
+        nav {
+            margin: 0;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 15px;
+        }
+        nav ul li {
+            margin: 0;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #673AB7;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav ul li a:hover {
+            background: #9C27B0;
+        }
+        .content {
+            width: 80%;
+            margin: 40px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .content h2 {
+            text-align: center;
+            color: #2196F3;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .content table, .content th, .content td {
+            border: 1px solid #ddd;
+        }
+        .content th, .content td {
+            padding: 12px;
+            text-align: left;
+        }
+        .content th {
+            background: #2196F3;
+            color: #fff;
+        }
+        .content tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <span class="med24">Med24</span>
+        <nav>
+            <ul>
+                <li><a href="/medicines">Browse Medicines</a></li>
+                <li><a href="/cart">View Cart</a></li>
+                <li><a href="/orders">Your Orders</a></li>
+                <li><a href="/display">View Profile</a></li>
+                <li><a href="/update">Update Profile</a></li>
+                <li><a href="/order_tracking">Order Tracking</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="content">
+        <h2>Order Tracking</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Medicine Name</th>
+                    <th>Quantity</th>
+                    <th>Order Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.order_id }}</td>
+                    <td>{{ order.medicine_name }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.order_date }}</td>
+                    <td>{{ order.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
