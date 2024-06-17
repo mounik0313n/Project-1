@@ -5,19 +5,15 @@ import re
 
 app = Flask(__name__)
 
-# Configure secret key for session management
 app.secret_key = 'your_secret_key'
 
-# Configure MySQL connection
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'Sudheer@123'
 app.config['MYSQL_DB'] = 'medicaldelivery'
 
-# Initialize MySQL
 mysql = MySQL(app)
 
-# Routes for user authentication and functionality
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -210,68 +206,7 @@ def orders():
         return render_template('orders.html', orders=orders)
     return redirect(url_for('login'))
 
-# Admin routes
-# @app.route('/admin')
-# def admin_dashboard():
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('SELECT * FROM users')
-#         users = cursor.fetchall()
-#         return render_template('admin.html', users=users)
-#     return redirect(url_for('login'))
 
-# @app.route('/admin/add_medicine', methods=['GET', 'POST'])
-# def add_medicine():
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         msg = ''
-#         if request.method == 'POST' and all(field in request.form for field in ['name', 'price', 'description']):
-#             name = request.form['name']
-#             price = request.form['price']
-#             description = request.form['description']
-#             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#             cursor.execute('INSERT INTO medicines (name, price, description) VALUES (%s, %s, %s)', (name, price, description,))
-#             mysql.connection.commit()
-#             msg = 'Medicine added successfully!'
-#         elif request.method == 'POST':
-#             msg = 'Please fill out the form!'
-#         return render_template('add_medicine.html', msg=msg)
-#     return redirect(url_for('login'))
-
-# @app.route('/admin/manage_medicines')
-# def manage_medicines():
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('SELECT * FROM medicines')
-#         medicines = cursor.fetchall()
-#         return render_template('manage_medicines.html', medicines=medicines)
-#     return redirect(url_for('login'))
-
-# @app.route('/admin/edit_medicine/<int:medicine_id>', methods=['GET', 'POST'])
-# def edit_medicine(medicine_id):
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         msg = ''
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('SELECT * FROM medicines WHERE id = %s', (medicine_id,))
-#         medicine = cursor.fetchone()
-#         if request.method == 'POST' and all(field in request.form for field in ['name', 'price', 'description']):
-#             name = request.form['name']
-#             price = request.form['price']
-#             description = request.form['description']
-#             cursor.execute('UPDATE medicines SET name = %s, price = %s, description = %s WHERE id = %s', (name, price, description, medicine_id,))
-#             mysql.connection.commit()
-#             msg = 'Medicine updated successfully!'
-#             return redirect(url_for('manage_medicines'))
-#         return render_template('edit_medicine.html', medicine=medicine, msg=msg)
-#     return redirect(url_for('login'))
-
-# @app.route('/admin/delete_medicine/<int:medicine_id>')
-# def delete_medicine(medicine_id):
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('DELETE FROM medicines WHERE id = %s', (medicine_id,))
-#         mysql.connection.commit()
-#         return redirect(url_for('manage_medicines'))
-#     return redirect(url_for('login'))
 @app.route('/admin')
 def admin_dashboard():
     if 'loggedin' in session and session['username'] == 'admin':
@@ -299,14 +234,7 @@ def add_medicine():
         return redirect(url_for('admin_dashboard'))
     return redirect(url_for('login'))
 
-# @app.route('/delete_medicine/<int:medicine_id>')
-# def delete_medicine(medicine_id):
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('DELETE FROM medicines WHERE id = %s', (medicine_id,))
-#         mysql.connection.commit()
-#         return redirect(url_for('admin_dashboard'))
-#     return redirect(url_for('login'))
+
 
 @app.route('/delete_medicine/<int:medicine_id>', methods=['POST'])
 def delete_medicine(medicine_id):
@@ -345,6 +273,6 @@ def order_tracking():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    port = 5000  # Change this to any port number you prefer
+    port = 5000  
     print(f"Starting Flask app on port {port}")
     app.run(debug=True, port=port)
