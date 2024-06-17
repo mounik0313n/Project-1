@@ -1,0 +1,21 @@
+| **Library/Module**                | **Methods/Functions Used**                    | **Description**                                                                                                       |
+|-----------------------------------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| **Flask**                         | `Flask`                                       | Creates an instance of the Flask application.                                                                         |
+|                                   | `render_template`                             | Renders an HTML template.                                                                                             |
+|                                   | `request`                                     | Accesses the request data (form data, query parameters, etc.).                                                        |
+|                                   | `redirect`                                    | Redirects the client to a different URL.                                                                              |
+|                                   | `url_for`                                     | Generates a URL for the specified function.                                                                           |
+|                                   | `session`                                     | Handles user sessions (storing session data).                                                                         |
+| **Flask-MySQLdb**                 | `MySQL`                                       | Establishes a connection to the MySQL database.                                                                       |
+| **MySQLdb.cursors**               | `DictCursor`                                  | A cursor that returns results as dictionaries, allowing access to rows by column names.                               |
+| **re (regular expression module)**| `match`                                       | Checks if a string matches a regular expression pattern.                                                              |
+| **Built-in Python methods**       | `str`                                         | Converts a value to a string.                                                                                         |
+|                                   | `int`                                         | Converts a value to an integer.                                                                                       |
+| **Flask Route Methods**           | `@app.route`                                  | Defines a route (URL endpoint) and binds it to a view function.                                                       |
+| **Session Handling**              | `session.pop`                                 | Removes an item from the session.                                                                                     |
+| **Database Cursor Methods**       | `cursor.execute`                              | Executes a SQL query.                                                                                                 |
+|                                   | `cursor.fetchone`                             | Fetches the next row of a query result set, returning a single sequence or None when no more data is available.       |
+|                                   | `cursor.fetchall`                             | Fetches all (remaining) rows of a query result, returning a list.                                                     |
+|                                   | `mysql.connection.commit`                     | Commits the current transaction.                                                                                      |
+| **Request Methods**               | `request.method`                              | Retrieves the HTTP method (GET, POST) used for the request.                                                           |
+|                                   | `request.form`                                | Accesses form data submitted with a POST request.                                                                     |
