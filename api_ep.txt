@@ -1,0 +1,14 @@
+| **API Endpoint**         | **Methods** | **Functionality**                                                                                                      |
+|--------------------------|-------------|------------------------------------------------------------------------------------------------------------------------|
+| `/`                      | GET, POST   | Renders the login page. Handles login by verifying username and password.                                               |
+| `/login`                 | GET, POST   | Renders the login page. Handles login by verifying username and password.                                               |
+| `/logout`                | GET         | Logs out the user by clearing session variables and redirects to login.                                                  |
+| `/register`              | GET, POST   | Renders the registration page. Handles user registration by validating input and saving to the database.                |
+| `/index`                 | GET         | Renders the index page if the user is logged in, otherwise redirects to login.                                          |
+| `/display`               | GET         | Displays the logged-in user's information. Redirects to login if not logged in.                                         |
+| `/update`                | GET, POST   | Renders the update page with current user information. Handles updating user information with validation.               |
+| `/medicines`             | GET         | Fetches and displays all available medicines. Redirects to login if not logged in.                                      |
+| `/add_to_cart/<int:id>`  | GET         | Adds the specified medicine to the user's cart. Redirects to login if not logged in.                                    |
+| `/cart`                  | GET         | Fetches and displays items in the user's cart. Redirects to login if not logged in.                                     |
+| `/checkout`              | GET         | Moves items from the cart to orders and clears the cart. Redirects to the orders page. Redirects to login if not logged in. |
+| `/orders`                | GET         | Fetches and displays the user's orders. Redirects to login if not logged in.                                            |
