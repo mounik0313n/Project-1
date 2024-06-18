@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00796b;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .pincode-form {
+            text-align: right;
+        }
+
+        .pincode-form input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        .pincode-form button {
+            padding: 10px 20px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .lab-tests {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .test {
+            background-color: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 300px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .test h2 {
+            font-size: 18px;
+            color: #00796b;
+            margin: 10px 0;
+        }
+
+        .test p {
+            color: #333;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .test button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+    <title>Lab Tests</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Lab Tests</h1>
+            <div class="pincode-form">
+                <form method="POST" action="{{ url_for('main.tests_by_pincode') }}">
+                    <label for="pincode">Enter Pincode:</label>
+                    <input type="text" id="pincode" name="pincode" required>
+                    <button type="submit">Check Availability</button>
+                </form>
+            </div>
+        </div>
+        <div class="lab-tests">
+            <div class="test">
+                <h2><a href="{{ url_for('main.basic_health_screening') }}">Basic Health Screening</a></h2>
+                <p>₹349 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Basic Health Screening">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.cardiovascular_health') }}">Cardiovascular Health</a></h2>
+                <p>₹499 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Cardiovascular Health">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.diabetes_management') }}">Diabetes Management</a></h2>
+                <p>₹399 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Diabetes Management">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.thyroid_function') }}">Thyroid Function</a></h2>
+                <p>₹299 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Thyroid Function">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.liver_function') }}">Liver Function</a></h2>
+                <p>₹349 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Liver Function">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.kidney_function') }}">Kidney Function</a></h2>
+                <p>₹299 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Kidney Function">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.infection_and_inflammation') }}">Infection and Inflammation</a></h2>
+                <p>₹399 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Infection and Inflammation">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.nutritional_and_vitamin_levels') }}">Nutritional and Vitamin Levels</a></h2>
+                <p>₹449 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Nutritional and Vitamin Levels">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.hormonal_panels') }}">Hormonal Panels</a></h2>
+                <p>₹499 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Hormonal Panels">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.reproductive_health') }}">Reproductive Health</a></h2>
+                <p>₹399 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Reproductive Health">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.autoimmune_disorders') }}">Autoimmune Disorders</a></h2>
+                <p>₹499 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Autoimmune Disorders">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.allergy_testing') }}">Allergy Testing</a></h2>
+                <p>₹499 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Allergy Testing">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.cancer_markers') }}">Cancer Markers</a></h2>
+                <p>₹599 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Cancer Markers">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.genetic_testing') }}">Genetic Testing</a></h2>
+                <p>₹999 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Genetic Testing">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.infectious_diseases') }}">Infectious Diseases</a></h2>
+                <p>₹299 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Infectious Diseases">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.urine_tests') }}">Urine Tests</a></h2>
+                <p>₹199 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Urine Tests">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.bone_health') }}">Bone Health</a></h2>
+                <p>₹399 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Bone Health">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.electrolyte_and_fluid_balance') }}">Electrolyte and Fluid Balance</a></h2>
+                <p>₹349 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Electrolyte and Fluid Balance">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.gastrointestinal_health') }}">Gastrointestinal Health</a></h2>
+                <p>₹449 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Gastrointestinal Health">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.toxicology_and_drug_testing') }}">Toxicology and Drug Testing</a></h2>
+                <p>₹599 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Toxicology and Drug Testing">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.immunology_and_serology') }}">Immunology and Serology</a></h2>
+                <p>₹499 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Immunology and Serology">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.endocrine_system') }}">Endocrine System</a></h2>
+                <p>₹499 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Endocrine System">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.rheumatology') }}">Rheumatology</a></h2>
+                <p>₹399 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Rheumatology">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.dermatology') }}">Dermatology</a></h2>
+                <p>₹499 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Dermatology">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.ophthalmology') }}">Ophthalmology</a></h2>
+                <p>₹599 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Ophthalmology">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            <div class="test">
+                <h2><a href="{{ url_for('main.neurology') }}">Neurology</a></h2>
+                <p>₹699 onwards</p>
+                <form action="{{ url_for('main.book_test') }}" method="get">
+                    <input type="hidden" name="test_type" value="Neurology">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

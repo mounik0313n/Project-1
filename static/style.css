@@ -1,0 +1,40 @@
+/* styles.css */
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-color: #f0f0f0; /* Light gray background */
+    color: #333; /* Dark gray text color */
+}
+
+/* Heading styles */
+h1 {
+    color: #006400; /* Dark green color */
+    margin-top: 50px; /* Adjust as needed */
+}
+
+/* Unordered list styles */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0; /* Adjust as needed */
+}
+
+/* List item styles */
+li {
+    padding: 10px;
+    background-color: #ffffff; /* White background */
+    border-radius: 5px; /* Rounded corners */
+    margin-bottom: 10px; /* Adjust as needed */
+    color: #333; /* Dark gray text color */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Hover effect on list items */
+li:hover {
+    background-color: #f0f0f0; /* Light gray background on hover */
+}

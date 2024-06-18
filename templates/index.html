@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #282c34; /* Dark background */
+            color: #ffffff; /* White text color */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .box {
+            background-color: #ffffff; /* White background */
+            padding: 20px;
+            margin: 20px 0; /* Vertical margin */
+            border-radius: 10px; /* Curved corners */
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        }
+
+        h1 {
+            color: #006400; /* Dark green color */
+            margin-bottom: 20px;
+        }
+
+        .top-right {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .top-right a, .box a {
+            display: inline-block;
+            color: #ffffff; /* White text color */
+            background-color: #006400; /* Dark green background for links */
+            padding: 10px 20px; /* Adjust as needed */
+            border-radius: 10px; /* Curved corners */
+            text-decoration: none; /* Remove underline */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        .top-right a:hover, .box a:hover {
+            background-color: #004d00; /* Darker green on hover */
+        }
+
+        @media (max-width: 600px) {
+            .box {
+                width: 90%; /* Full width on small screens */
+            }
+        }
+    </style>
+    <title>Lab Tests</title>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <h1>Welcome to the Lab Tests</h1>
+        </div>
+        <div class="box top-right">
+            <a href="{{ url_for('main.login') }}">Log In</a>
+            <a href="{{ url_for('main.signup') }}">Sign Up</a>
+        </div>
+        <div class="box">
+            <a href="{{ url_for('main.tests') }}">View Tests</a>
+        </div>
+    </div>
+</body>
+</html>
