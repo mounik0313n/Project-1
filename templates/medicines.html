@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medicines</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .content {
+            width: 60%;
+            margin: 50px auto;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .topbar {
+            background: #00bcd4;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .contentbar {
+            background: #fff;
+            padding: 30px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .contentbar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .contentbar li {
+            background-color: #f0f0f0;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .contentbar li p {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .contentbar li a {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .contentbar li a:hover {
+            background-color: #45a049;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #00bcd4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="topbar">
+            <h1>Available Medicines</h1>
+        </div>
+        <div class="contentbar">
+            <ul>
+                {% for medicine in medicines %}
+                    <li>
+                        <p>{{ medicine['name'] }} - ₹{{ medicine['price'] }}</p>
+                        <a href="{{ url_for('add_to_cart', medicine_id=medicine['id']) }}">Add to Cart</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="back-link">
+                <a href="/cart">View Cart</a>
+                <span>|</span>
+                <a href="/index">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
