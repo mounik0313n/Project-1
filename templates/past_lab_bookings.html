@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Past Lab Bookings</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Past Lab Bookings</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Lab Test</th>
+                    <th>Date</th>
+                    <th>Results</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lab_booking in lab_bookings %}
+                <tr>
+                    <td>{{ lab_booking.lab_test_id }}</td>
+                    <td>${{ lab_booking.date }}</td>
+                    <td>{{ lab_booking.results}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

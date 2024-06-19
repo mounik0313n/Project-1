@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultations</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Book a Consultation</h1>
+        <form action="/book_consultation" method="post" class="mb-5">
+            <div class="form-group">
+                <label for="consultation_id">Select a Doctor:</label>
+                <select id="consultation_id" name="consultation_id" class="form-control" required>
+                    {% for doctor in doctors %}
+                        <option value="{{ doctor.id }}">{{ doctor.name }} - {{ doctor.specialty }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="consultation_date">Date:</label>
+                <input type="date" id="consultation_date" name="date" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Book Consultation</button>
+        </form>
+    </div>
+</body>
+</html>

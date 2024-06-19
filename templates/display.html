@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .content {
+            width: 60%;
+            background: linear-gradient(to right, #00b4db, #0083b0);
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .topbar {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .contentbar {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .contentbar p {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .contentbar a {
+            text-decoration: none;
+            color: #0072ff;
+            font-weight: bold;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .contentbar a:hover {
+            color: #00c6ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="topbar">
+            <h1>Profile</h1>
+        </div>
+        <div class="contentbar">
+            <p>Username: {{ account['username'] }}</p>
+            <p>Email: {{ account['email'] }}</p>
+            <p>Medical Condition: {{ account['medical_condition'] }}</p>
+            <p>Address: {{ account['address'] }}</p>
+            <p>City: {{ account['city'] }}</p>
+            <p>State: {{ account['state'] }}</p>
+            <p>Country: {{ account['country'] }}</p>
+            <p>Postal Code: {{ account['postalcode'] }}</p>
+            <p><a href="/update">Update Profile</a></p>
+            <p><a href="/index">Back to Home</a></p>
+        </div>
+    </div>
+</body>
+</html>

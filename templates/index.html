@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .topbar {
+            background: #512DA8;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .med24 {
+            font-size: 32px;
+            font-weight: bold;
+            font-family: 'Arial Black', Gadget, sans-serif;
+            color: #FFC107;
+            text-transform: uppercase;
+        }
+        nav {
+            margin: 0;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 15px;
+        }
+        nav ul li {
+            margin: 0;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #673AB7;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav ul li a:hover {
+            background: #9C27B0;
+        }
+        .health-info {
+            text-align: center;
+            margin: 20px auto;
+            padding: 15px;
+            color: #fff;
+            background: #2196F3;
+            font-size: 18px;
+            border-radius: 8px;
+            max-width: 80%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .welcome {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 28px;
+            color: #333;
+        }
+        .content {
+            width: 60%;
+            margin: 20px auto;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .contentbar {
+            background: #fff;
+            padding: 30px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .contentbar h2 {
+            text-align: center;
+            color: #2196F3;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .contentbar p {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #666;
+        }
+        .cta-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .cta-buttons a {
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            background: #FF5722;
+            border-radius: 4px;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        .cta-buttons a:hover {
+            background: #E64A19;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <span class="med24">Med24</span>
+        <nav>
+            <ul>
+                <!-- Remove non-functional Home button -->
+                <li><a href="/medicines">Browse Medicines</a></li>
+                <li><a href="/cart">View Cart</a></li>
+                <li><a href="/orders">Your Orders</a></li>
+                <li><a href="/display">View Profile</a></li>
+                <li><a href="/update">Update Profile</a></li>
+                <li><a href="/order_tracking">Order Tracking</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="health-info">
+        <p>Welcome to Med24, your one-stop solution for all your medical needs. Stay healthy and take care!</p>
+    </div>
+    <div class="welcome">
+        <h1>Welcome, {{ session['username'] }}</h1>
+    </div>
+    <div class="content">
+        <div class="contentbar">
+            <h2>Medical Delivery System</h2>
+            <p>We ensure timely delivery of quality medicines right at your doorstep. Your health is our priority. Explore our wide range of products and enjoy seamless healthcare services.</p>
+            <div class="cta-buttons">
+                <a href="/consultation1">Doctor Consultations</a>
+                <a href="/lab_tests">Lab Tests</a>
+                <a href="/past_consultations">Past Doctor Consultations</a>
+                <a href="/past_lab_bookings">Past Lab Bookings</a>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
