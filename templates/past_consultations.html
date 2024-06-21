@@ -14,6 +14,8 @@
                     <th>Consultation ID</th>
                     <th>Doctor ID</th>
                     <th>Date</th>
+                    <th>Time</th>
+                    <th>Consultation Fee</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,6 +24,8 @@
                     <td>{{ consultation.id }}</td>
                     <td>{{ consultation.doctor_id }}</td>
                     <td>{{ consultation.consultation_date }}</td>
+                    <td>{{ consultation.consultation_time }}</td>
+                    <td>{{ consultation.consultation_fee }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

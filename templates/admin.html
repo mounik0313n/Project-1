@@ -108,7 +108,9 @@
             margin-bottom: 20px;
         }
         .admin-section input[type="text"],
-        .admin-section input[type="number"] {
+        .admin-section input[type="number"],
+        .admin-section input[type="submit"],
+        .admin-section select {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -136,26 +138,25 @@
         setInterval(updateTime, 1000);
     </script>
 </head>
-<body onload="updateTime()">
+<body>
     <div class="topbar">
-        <span class="med24">Med24</span>
+        <div class="med24">MED24</div>
+        <div class="current-time" id="current-time"></div>
         <nav>
             <ul>
-                <li><span class="current-time" id="current-time"></span></li>
-                <li><a href="/logout">Logout</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
         </nav>
     </div>
-    <div class="welcome">
-        <h1>Welcome, Admin</h1>
-    </div>
+    <div class="welcome">Welcome, Admin</div>
     <div class="content">
         <div class="contentbar">
             <h2>Admin Dashboard</h2>
 
+            <!-- Medicines Section -->
             <div class="admin-section">
                 <h3>Manage Medicines</h3>
-                <form action="/add_medicine" method="post">
+                <form method="post" action="{{ url_for('add_medicine') }}">
                     <input type="text" name="name" placeholder="Medicine Name" required>
                     <input type="number" name="price" placeholder="Price" required>
                     <input type="submit" value="Add Medicine">
@@ -170,14 +171,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Medicine items will be rendered here from the server -->
                         {% for medicine in medicines %}
                         <tr>
                             <td>{{ medicine.id }}</td>
                             <td>{{ medicine.name }}</td>
                             <td>{{ medicine.price }}</td>
                             <td>
-                                <form action="/delete_medicine/{{ medicine.id }}" method="post" style="display:inline;">
+                                <form method="post" action="{{ url_for('delete_medicine', medicine_id=medicine.id) }}">
                                     <input type="submit" value="Delete">
                                 </form>
                             </td>
@@ -187,115 +187,14 @@
                 </table>
             </div>
 
-            <div class="admin-section">
-                <h3>Manage Consultations</h3>
-                <form action="/add_consultation" method="post">
-                    <input type="text" name="doctor_name" placeholder="Doctor Name" required>
-                    <input type="text" name="specialty" placeholder="Specialty" required>
-                    <input type="number" name="price" placeholder="Price" required>
-                    <input type="submit" value="Add Consultation">
-                </form>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Doctor Name</th>
-                            <th>Specialty</th>
-                            <th>Price</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Consultation items will be rendered here from the server -->
-                        {% for consultation in consultations %}
-                        <tr>
-                            <td>{{ consultation.id }}</td>
-                            <td>{{ consultation.doctor_name }}</td>
-                            <td>{{ consultation.specialty }}</td>
-                            <td>{{ consultation.price }}</td>
-                            <td>
-                                <form action="/delete_consultation/{{ consultation.id }}" method="post" style="display:inline;">
-                                    <input type="submit" value="Delete">
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="admin-section">
-                <h3>Manage Lab Tests</h3>
-                <form action="/add_lab_test" method="post">
-                    <input type="text" name="test_name" placeholder="Test Name" required>
-                    <input type="number" name="price" placeholder="Price" required>
-                    <input type="submit" value="Add Lab Test">
-                </form>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Test Name</th>
-                            <th>Price</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Lab test items will be rendered here from the server -->
-                        {% for lab_test in lab_tests %}
-                        <tr>
-                            <td>{{ lab_test.id }}</td>
-                            <td>{{ lab_test.test_name }}</td>
-                            <td>{{ lab_test.price }}</td>
-                            <td>
-                                <form action="/delete_lab_test/{{ lab_test.id }}" method="post" style="display:inline;">
-                                    <input type="submit" value="Delete">
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="admin-section">
-                <h3>Manage Bookings</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Booking ID</th>
-                            <th>Consultation ID</th>
-                            <th>User ID</th>
-                            <th>Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Booking items will be rendered here from the server -->
-                        {% for booking in bookings %}
-                        <tr>
-                            <td>{{ booking.id }}</td>
-                            <td>{{ booking.consultation_id }}</td>
-                            <td>{{ booking.user_id }}</td>
-                            <td>{{ booking.date }}</td>
-                            <td>
-                                <form action="/delete_booking/{{ booking.id }}" method="post" style="display:inline;">
-                                    <input type="submit" value="Delete">
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
+            <!-- Orders Section -->
             <div class="admin-section">
                 <h3>Manage Orders</h3>
                 <table>
                     <thead>
                         <tr>
-                            <th>Order ID</th>
-                            <th>Medicine Name</th>
+                            <th>ID</th>
+                            <th>Medicine</th>
                             <th>User</th>
                             <th>Price</th>
                             <th>Status</th>
@@ -303,7 +202,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Order items will be rendered here from the server -->
                         {% for order in orders %}
                         <tr>
                             <td>{{ order.id }}</td>
@@ -312,13 +210,87 @@
                             <td>{{ order.price }}</td>
                             <td>{{ order.status }}</td>
                             <td>
-                                <form action="/update_order/{{ order.id }}" method="post" style="display:inline;">
+                                <form method="post" action="{{ url_for('update_order', order_id=order.id) }}">
                                     <select name="status">
                                         <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
                                         <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
                                         <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
                                     </select>
                                     <input type="submit" value="Update">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Doctors Section -->
+            <div class="admin-section">
+                <h3>Manage Doctors</h3>
+                <form method="post" action="{{ url_for('add_doctor') }}">
+                    <input type="text" name="name" placeholder="Doctor Name" required>
+                    <input type="text" name="specialty" placeholder="Specialty" required>
+                    <input type="number" name="consultation_fee" placeholder="Consultation Fee" required>
+                    <input type="submit" value="Add Doctor">
+                </form>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Specialty</th>
+                            <th>Consultation Fee</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doctor in doctors %}
+                        <tr>
+                            <td>{{ doctor.id }}</td>
+                            <td>{{ doctor.name }}</td>
+                            <td>{{ doctor.specialty }}</td>
+                            <td>{{ doctor.consultation_fee }}</td>
+                            <td>
+                                <form method="post" action="{{ url_for('delete_doctor', id=doctor.id) }}">
+                                    <input type="submit" value="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Lab Tests Section -->
+            <div class="admin-section">
+                <h3>Manage Lab Tests</h3>
+                <form method="post" action="{{ url_for('add_lab_test') }}">
+                    <input type="text" name="name" placeholder="Lab Test Name" required>
+                    <input type="text" name="description" placeholder="Description" required>
+                    <input type="number" name="price" placeholder="Price" required>
+                    <input type="submit" value="Add Lab Test">
+                </form>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lab_test in lab_tests %}
+                        <tr>
+                            <td>{{ lab_test.id }}</td>
+                            <td>{{ lab_test.name }}</td>
+                            <td>{{ lab_test.description }}</td>
+                            <td>{{ lab_test.price }}</td>
+                            <td>
+                                <form method="post" action="{{ url_for('delete_lab_test', lab_test_id=lab_test.id) }}">
+                                    <input type="submit" value="Delete">
                                 </form>
                             </td>
                         </tr>
