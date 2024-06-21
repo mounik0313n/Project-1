@@ -1,23 +1,66 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session,jsonify
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
+import google.generativeai as genai
+# from google.generativeai import get_chat_response
+
+
+
+API_KEY = 'AIzaSyCCrYnLhDIgToWeG4u_nPpQcB9uNJMze0U'
+genai.configure(api_key=API_KEY)
+
+model = genai.GenerativeModel('gemini-pro')
+chat = model.start_chat(history=[])
+instruction = "In this chat, respond to medical-related queries only. If the query is not medical-related, please respond with a polite message stating that I can only answer medical questions."
+
+medical_keywords = [
+    'doctor', 'medicine', 'health', 'symptom', 'treatment', 'diagnosis', 
+    'therapy', 'medical', 'hospital', 'clinic', 'pharmacy', 'nurse', 
+    'emergency', 'surgery', 'physician', 'prescription', 'patient', 
+    'healthcare', 'pediatrician', 'dermatologist', 'gynecologist', 
+    'cardiologist', 'neurologist', 'oncologist', 'radiologist', 
+    'psychiatrist', 'ophthalmologist', 'orthopedic', 'dietitian', 
+    'allergist', 'chiropractor', 'podiatrist', 'medication', 'delivery', 
+    'order', 'track', 'shipment', 'customer service', 'pharmacy network', 
+    'health advice', 'emergency assistance', 'drug recall', 'side effects', 
+    'health tips', 'medication reminder', 'privacy', 'compliance', 'regulation', 
+    'data privacy', 'healthcare provider', 'first aid', 'health guide', 
+    'medicine availability', 'online pharmacy', 'prescription refill', 
+    'pharmacy support', 'medication information', 'drug interaction', 
+    'drug safety', 'medical emergency', 'pharmacy services', 'drug delivery', 
+    'medical delivery', 'patient support', 'order status', 'payment options', 
+    'drug compatibility', 'pharmaceutical care', 'patient care', 'medicine use', 
+    'healthcare advice', 'prescription advice', 'medication order', 'prescription order', 
+    'medication guidance', 'pharmacy assistance', 'healthcare support',
+    'consultation', 'doctor consultation', 'medical advice', 'health consultation', 
+    'telemedicine', 'virtual consultation', 'medical specialist', 'doctor appointment', 
+    'online doctor', 'specialist consultation', 'second opinion', 'health specialist', 
+    'medical consultation', 'physician consultation', 'GP consultation', 'doctor visit', 
+    'health check', 'medical opinion', 'medical referral', 'remote consultation',
+    'lab test', 'blood test', 'urine test', 'diagnostic test', 'pathology', 
+    'laboratory', 'lab technician', 'test result', 'lab procedure', 
+    'medical test', 'clinical test', 'biopsy', 'culture test', 'genetic test', 
+    'microbiology test', 'serology test', 'immunology test', 'radiology test', 
+    'PCR test', 'MRI scan', 'CT scan', 'X-ray', 'ultrasound'
+]
+
+
+
+
+
 
 app = Flask(__name__)
 
-# Configure secret key for session management
 app.secret_key = 'your_secret_key'
 
-# Configure MySQL connection
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '12345678'
-app.config['MYSQL_DB'] = 'medicaldelivery1'
+app.config['MYSQL_PASSWORD'] = 'Sudheer@123'
+app.config['MYSQL_DB'] = 'medicaldelivery'
 
-# Initialize MySQL
 mysql = MySQL(app)
 
-# Routes for user authentication and functionality
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -224,76 +267,6 @@ def checkout():
         return redirect(url_for('orders'))
     return redirect(url_for('login'))
 
-# @app.route('/admin')
-# def admin_dashboard():
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('SELECT * FROM medicines')
-#         medicines = cursor.fetchall()
-#         cursor.execute('''
-#             SELECT orders.id, medicines.name AS medicine_name, users.username, medicines.price, orders.status 
-#             FROM orders 
-#             JOIN medicines ON orders.medicine_id = medicines.id 
-#             JOIN users ON orders.user_id = users.id
-#         ''')
-#         orders = cursor.fetchall()
-#         return render_template('admin.html', medicines=medicines, orders=orders)
-#     return redirect(url_for('login'))
-
-# @app.route('/add_medicine', methods=['POST'])
-# def add_medicine():
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         name = request.form['name']
-#         price = request.form['price']
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('INSERT INTO medicines (name, price) VALUES (%s, %s)', (name, price))
-#         mysql.connection.commit()
-#         return redirect(url_for('admin_dashboard'))
-#     return redirect(url_for('login'))
-
-
-
-# @app.route('/delete_medicine/<int:medicine_id>', methods=['POST'])
-# def delete_medicine(medicine_id):
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('DELETE FROM medicines WHERE id = %s', (medicine_id,))
-#         mysql.connection.commit()
-#         return redirect(url_for('admin_dashboard'))
-#     return redirect(url_for('login'))
-
-# @app.route('/add_doctor', methods=['POST'])
-# def add_doctor():
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         name = request.form['name']
-#         specialty = request.form['specialty']
-#         consultation_fee = request.form['consultation_fee']
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('INSERT INTO doctors (name, specialty, consultation_fee) VALUES (%s, %s, %s)', (name, specialty, consultation_fee))
-#         mysql.connection.commit()
-#         return redirect(url_for('admin_dashboard'))
-#     return redirect(url_for('login'))
-
-# @app.route('/delete_doctor/<int:id>', methods=['POST'])
-# def delete_doctor(id):
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('DELETE FROM doctors WHERE id = %s', (id,))
-#         mysql.connection.commit()
-#         return redirect(url_for('admin_dashboard'))
-#     return redirect(url_for('login'))
-
-
-
-# @app.route('/update_order/<int:order_id>', methods=['POST'])
-# def update_order(order_id):
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         status = request.form['status']
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('UPDATE orders SET status = %s WHERE id = %s', (status, order_id))
-#         mysql.connection.commit()
-#         return redirect(url_for('admin_dashboard'))
-#     return redirect(url_for('login'))
 
 @app.route('/admin')
 def admin_dashboard():
@@ -388,22 +361,7 @@ def update_order(order_id):
     return redirect(url_for('login'))
 
 
-# @app.route('/consultation1')
-# def consultation1():
-#     if 'loggedin' in session:
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        
-#         # Fetch doctors
-#         cursor.execute('SELECT * FROM doctors')
-#         doctors = cursor.fetchall()
-        
-#         # Fetch lab tests
-#         cursor.execute('SELECT * FROM lab_tests')
-#         lab_tests = cursor.fetchall()
-        
-#         return render_template('consultation.html', doctors=doctors, lab_tests=lab_tests)
-    
-#     return redirect(url_for('login'))
+
 
 @app.route('/consultation1')
 def consultation1():
@@ -431,51 +389,10 @@ def lab_tests():
     
     return redirect(url_for('login'))
 
-'''@app.route('/book_consultation', methods=['POST'])
-def book_consultation():
-    if 'loggedin' in session:
-        doctor_id = request.form['consultation_id']
-        consultation_date = request.form['date']
-        consultation_time = request.form['time']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('INSERT INTO consultations (user_id, doctor_id, consultation_date) VALUES (%s, %s, %s)', (session['id'], doctor_id, consultation_date))
-        cursor.execute('INSERT INTO consultations (user_id, doctor_id, consultation_date, consultation_time) VALUES (%s, %s, %s, %s)', (session['id'], doctor_id, consultation_date, consultation_time))
 
-        mysql.connection.commit()
-        return redirect(url_for('index'))
-    return redirect(url_for('login'))'''
 from flask import flash
 
-'''@app.route('/book_consultation', methods=['POST'])
-def book_consultation():
-    if 'loggedin' in session:
-        doctor_id = request.form['consultation_id']
-        consultation_date = request.form['date']
-        consultation_time = request.form['time']
-        
-        # Fetch consultation fee from the doctors table
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT consultation_fee FROM doctors WHERE id = %s', (doctor_id))
-        doctor = cursor.fetchone()
-        
-        if doctor:
-            consultation_fee = doctor['consultation_fee']
-            
-            # Insert consultation details into the consultations table
-            cursor.execute('INSERT INTO consultations (user_id, doctor_id, consultation_date, consultation_time) VALUES (%s, %s, %s, %s, %s)', 
-                           (session['id'], doctor_id, consultation_date, consultation_time))
-            mysql.connection.commit()
-            
-            # Flash a success message
-            flash('Consultation booked successfully', 'success')
-            
-            # Redirect to the index page
-            return redirect(url_for('index'))
-        else:
-            # Handle case where doctor with given ID is not found
-            flash('Doctor not found', 'error')
-            return redirect(url_for('index'))
-    return redirect(url_for('login')) '''
+
 @app.route('/book_consultation', methods=['POST'])
 def book_consultation():
     if 'loggedin' in session:
@@ -483,7 +400,6 @@ def book_consultation():
         consultation_date = request.form['date']
         consultation_time = request.form['time']
         
-        # Fetch consultation fee from the doctors table
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT consultation_fee FROM doctors WHERE id = %s', (doctor_id,))
         doctor = cursor.fetchone()
@@ -491,15 +407,12 @@ def book_consultation():
         if doctor:
             consultation_fee = doctor['consultation_fee']
             
-            # Insert consultation details into the consultations table
             cursor.execute('INSERT INTO consultations (user_id, doctor_id, consultation_date, consultation_time, consultation_fee) VALUES (%s, %s, %s, %s, %s)', 
                            (session['id'], doctor_id, consultation_date, consultation_time, consultation_fee))
             mysql.connection.commit()
             
-            # Flash a success message
             flash('Consultation booked successfully', 'success')
         else:
-            # Handle case where doctor with given ID is not found
             flash('Doctor not found', 'error')
         
         cursor.close()
@@ -520,15 +433,7 @@ def schedule_lab_test():
         return redirect(url_for('index'))
     return redirect(url_for('login'))
 
-'''
-@app.route('/past_consultations')
-def past_consultations():
-    if 'loggedin' in session:
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM consultations WHERE user_id = %s', (session['id'],))
-        consultations = cursor.fetchall()
-        return render_template('past_consultations.html', consultations=consultations)
-    return redirect(url_for('login'))'''
+
 @app.route('/past_consultations')
 def past_consultations():
     if 'loggedin' in session:
@@ -555,5 +460,30 @@ def past_lab_bookings():
 
 
 
+@app.route('/chat')
+def home():
+    return render_template('chat.html')
+
+@app.route('/ask', methods=['POST'])
+def ask():
+    user_message = str(request.form['messageText'])
+    
+    if not is_medical_query(user_message):
+        bot_response_text = "I'm sorry, I can only answer medical-related questions. Please ask a question related to medical topics."
+    else:
+        bot_response = chat.send_message(user_message)
+        bot_response_text = bot_response.text
+    
+    return jsonify({'status': 'OK', 'answer': bot_response_text})
+
+def is_medical_query(query):
+    return any(keyword in query.lower() for keyword in medical_keywords)
+# Route to handle the user's question
+
+
+
+
+
+
 if __name__ == '__main__':
-    app.run(debug=True,port=6800)
+    app.run(debug=True,port=6801)
