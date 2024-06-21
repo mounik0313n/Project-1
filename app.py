@@ -11,7 +11,7 @@ app.secret_key = 'your_secret_key'
 # Configure MySQL connection
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Sudheer@123'
+app.config['MYSQL_PASSWORD'] = '12345678'
 app.config['MYSQL_DB'] = 'medicaldelivery1'
 
 # Initialize MySQL
@@ -224,50 +224,36 @@ def checkout():
         return redirect(url_for('orders'))
     return redirect(url_for('login'))
 
-# @app.route('/consultation')
-# def consultation():
-#     if 'loggedin' in session:
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('SELECT * FROM consultations')
-#         consultations = cursor.fetchall()
-#         return render_template('consultation.html', consultations=consultations)
-#     return redirect(url_for('login'))
-
-# @app.route('/book_consultation', methods=['POST'])
-# def book_consultation():
-#     if 'loggedin' in session:
-#         consultation_id = request.form['consultation_id']
-#         date = request.form['date']
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('INSERT INTO bookings (user_id, consultation_id, date) VALUES (%s, %s, %s)', (session['id'], consultation_id, date))
-#         mysql.connection.commit()
-#         return redirect(url_for('index'))
-#     return redirect(url_for('login'))
-
-# @app.route('/admin_dashboard')
+# @app.route('/admin')
 # def admin_dashboard():
 #     if 'loggedin' in session and session['username'] == 'admin':
 #         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 #         cursor.execute('SELECT * FROM medicines')
 #         medicines = cursor.fetchall()
-#         return render_template('admin.html', medicines=medicines)
+#         cursor.execute('''
+#             SELECT orders.id, medicines.name AS medicine_name, users.username, medicines.price, orders.status 
+#             FROM orders 
+#             JOIN medicines ON orders.medicine_id = medicines.id 
+#             JOIN users ON orders.user_id = users.id
+#         ''')
+#         orders = cursor.fetchall()
+#         return render_template('admin.html', medicines=medicines, orders=orders)
 #     return redirect(url_for('login'))
 
-# @app.route('/add_medicine', methods=['GET', 'POST'])
+# @app.route('/add_medicine', methods=['POST'])
 # def add_medicine():
 #     if 'loggedin' in session and session['username'] == 'admin':
-#         if request.method == 'POST' and 'name' in request.form and 'price' in request.form and 'quantity' in request.form:
-#             name = request.form['name']
-#             price = request.form['price']
-#             quantity = request.form['quantity']
-#             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#             cursor.execute('INSERT INTO medicines (name, price, quantity) VALUES (%s, %s, %s)', (name, price, quantity))
-#             mysql.connection.commit()
-#             return redirect(url_for('admin_dashboard'))
-#         return render_template('add_medicine.html')
+#         name = request.form['name']
+#         price = request.form['price']
+#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+#         cursor.execute('INSERT INTO medicines (name, price) VALUES (%s, %s)', (name, price))
+#         mysql.connection.commit()
+#         return redirect(url_for('admin_dashboard'))
 #     return redirect(url_for('login'))
 
-# @app.route('/delete_medicine/<int:medicine_id>')
+
+
+# @app.route('/delete_medicine/<int:medicine_id>', methods=['POST'])
 # def delete_medicine(medicine_id):
 #     if 'loggedin' in session and session['username'] == 'admin':
 #         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -276,36 +262,37 @@ def checkout():
 #         return redirect(url_for('admin_dashboard'))
 #     return redirect(url_for('login'))
 
-# @app.route('/admin_consultations')
-# def admin_consultations():
+# @app.route('/add_doctor', methods=['POST'])
+# def add_doctor():
 #     if 'loggedin' in session and session['username'] == 'admin':
+#         name = request.form['name']
+#         specialty = request.form['specialty']
+#         consultation_fee = request.form['consultation_fee']
 #         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('SELECT * FROM consultations')
-#         consultations = cursor.fetchall()
-#         return render_template('admin_consultations.html', consultations=consultations)
-#     return redirect(url_for('login'))
-
-# @app.route('/add_consultation', methods=['GET', 'POST'])
-# def add_consultation():
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         if request.method == 'POST' and all(field in request.form for field in ['doctor_name', 'specialty', 'price']):
-#             doctor_name = request.form['doctor_name']
-#             specialty = request.form['specialty']
-#             price = request.form['price']
-#             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#             cursor.execute('INSERT INTO consultations (doctor_name, specialty, price) VALUES (%s, %s, %s)', (doctor_name, specialty, price))
-#             mysql.connection.commit()
-#             return redirect(url_for('admin_consultations'))
-#         return render_template('add_consultation.html')
-#     return redirect(url_for('login'))
-
-# @app.route('/delete_consultation/<int:consultation_id>')
-# def delete_consultation(consultation_id):
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('DELETE FROM consultations WHERE id = %s', (consultation_id,))
+#         cursor.execute('INSERT INTO doctors (name, specialty, consultation_fee) VALUES (%s, %s, %s)', (name, specialty, consultation_fee))
 #         mysql.connection.commit()
-#         return redirect(url_for('admin_consultations'))
+#         return redirect(url_for('admin_dashboard'))
+#     return redirect(url_for('login'))
+
+# @app.route('/delete_doctor/<int:id>', methods=['POST'])
+# def delete_doctor(id):
+#     if 'loggedin' in session and session['username'] == 'admin':
+#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+#         cursor.execute('DELETE FROM doctors WHERE id = %s', (id,))
+#         mysql.connection.commit()
+#         return redirect(url_for('admin_dashboard'))
+#     return redirect(url_for('login'))
+
+
+
+# @app.route('/update_order/<int:order_id>', methods=['POST'])
+# def update_order(order_id):
+#     if 'loggedin' in session and session['username'] == 'admin':
+#         status = request.form['status']
+#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+#         cursor.execute('UPDATE orders SET status = %s WHERE id = %s', (status, order_id))
+#         mysql.connection.commit()
+#         return redirect(url_for('admin_dashboard'))
 #     return redirect(url_for('login'))
 
 @app.route('/admin')
@@ -321,7 +308,11 @@ def admin_dashboard():
             JOIN users ON orders.user_id = users.id
         ''')
         orders = cursor.fetchall()
-        return render_template('admin.html', medicines=medicines, orders=orders)
+        cursor.execute('SELECT * FROM doctors')
+        doctors = cursor.fetchall()
+        cursor.execute('SELECT * FROM lab_tests')
+        lab_tests = cursor.fetchall()
+        return render_template('admin.html', medicines=medicines, orders=orders, doctors=doctors, lab_tests=lab_tests)
     return redirect(url_for('login'))
 
 @app.route('/add_medicine', methods=['POST'])
@@ -335,15 +326,6 @@ def add_medicine():
         return redirect(url_for('admin_dashboard'))
     return redirect(url_for('login'))
 
-# @app.route('/delete_medicine/<int:medicine_id>')
-# def delete_medicine(medicine_id):
-#     if 'loggedin' in session and session['username'] == 'admin':
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('DELETE FROM medicines WHERE id = %s', (medicine_id,))
-#         mysql.connection.commit()
-#         return redirect(url_for('admin_dashboard'))
-#     return redirect(url_for('login'))
-
 @app.route('/delete_medicine/<int:medicine_id>', methods=['POST'])
 def delete_medicine(medicine_id):
     if 'loggedin' in session and session['username'] == 'admin':
@@ -353,6 +335,47 @@ def delete_medicine(medicine_id):
         return redirect(url_for('admin_dashboard'))
     return redirect(url_for('login'))
 
+@app.route('/add_doctor', methods=['POST'])
+def add_doctor():
+    if 'loggedin' in session and session['username'] == 'admin':
+        name = request.form['name']
+        specialty = request.form['specialty']
+        consultation_fee = request.form['consultation_fee']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('INSERT INTO doctors (name, specialty, consultation_fee) VALUES (%s, %s, %s)', (name, specialty, consultation_fee))
+        mysql.connection.commit()
+        return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('login'))
+
+@app.route('/delete_doctor/<int:id>', methods=['POST'])
+def delete_doctor(id):
+    if 'loggedin' in session and session['username'] == 'admin':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('DELETE FROM doctors WHERE id = %s', (id,))
+        mysql.connection.commit()
+        return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('login'))
+
+@app.route('/add_lab_test', methods=['POST'])
+def add_lab_test():
+    if 'loggedin' in session and session['username'] == 'admin':
+        name = request.form['name']
+        price = request.form['price']
+        description = request.form['description']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('INSERT INTO lab_tests (name, description, price) VALUES (%s, %s, %s)', (name, description, price))
+        mysql.connection.commit()
+        return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('login'))
+
+@app.route('/delete_lab_test/<int:lab_test_id>', methods=['POST'])
+def delete_lab_test(lab_test_id):
+    if 'loggedin' in session and session['username'] == 'admin':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('DELETE FROM lab_tests WHERE id = %s', (lab_test_id,))
+        mysql.connection.commit()
+        return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('login'))
 
 @app.route('/update_order/<int:order_id>', methods=['POST'])
 def update_order(order_id):
@@ -363,8 +386,6 @@ def update_order(order_id):
         mysql.connection.commit()
         return redirect(url_for('admin_dashboard'))
     return redirect(url_for('login'))
-
-
 
 
 # @app.route('/consultation1')
@@ -410,16 +431,83 @@ def lab_tests():
     
     return redirect(url_for('login'))
 
+'''@app.route('/book_consultation', methods=['POST'])
+def book_consultation():
+    if 'loggedin' in session:
+        doctor_id = request.form['consultation_id']
+        consultation_date = request.form['date']
+        consultation_time = request.form['time']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('INSERT INTO consultations (user_id, doctor_id, consultation_date) VALUES (%s, %s, %s)', (session['id'], doctor_id, consultation_date))
+        cursor.execute('INSERT INTO consultations (user_id, doctor_id, consultation_date, consultation_time) VALUES (%s, %s, %s, %s)', (session['id'], doctor_id, consultation_date, consultation_time))
+
+        mysql.connection.commit()
+        return redirect(url_for('index'))
+    return redirect(url_for('login'))'''
+from flask import flash
+
+'''@app.route('/book_consultation', methods=['POST'])
+def book_consultation():
+    if 'loggedin' in session:
+        doctor_id = request.form['consultation_id']
+        consultation_date = request.form['date']
+        consultation_time = request.form['time']
+        
+        # Fetch consultation fee from the doctors table
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT consultation_fee FROM doctors WHERE id = %s', (doctor_id))
+        doctor = cursor.fetchone()
+        
+        if doctor:
+            consultation_fee = doctor['consultation_fee']
+            
+            # Insert consultation details into the consultations table
+            cursor.execute('INSERT INTO consultations (user_id, doctor_id, consultation_date, consultation_time) VALUES (%s, %s, %s, %s, %s)', 
+                           (session['id'], doctor_id, consultation_date, consultation_time))
+            mysql.connection.commit()
+            
+            # Flash a success message
+            flash('Consultation booked successfully', 'success')
+            
+            # Redirect to the index page
+            return redirect(url_for('index'))
+        else:
+            # Handle case where doctor with given ID is not found
+            flash('Doctor not found', 'error')
+            return redirect(url_for('index'))
+    return redirect(url_for('login')) '''
 @app.route('/book_consultation', methods=['POST'])
 def book_consultation():
     if 'loggedin' in session:
         doctor_id = request.form['consultation_id']
         consultation_date = request.form['date']
+        consultation_time = request.form['time']
+        
+        # Fetch consultation fee from the doctors table
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('INSERT INTO consultations (user_id, doctor_id, consultation_date) VALUES (%s, %s, %s)', (session['id'], doctor_id, consultation_date))
-        mysql.connection.commit()
+        cursor.execute('SELECT consultation_fee FROM doctors WHERE id = %s', (doctor_id,))
+        doctor = cursor.fetchone()
+        
+        if doctor:
+            consultation_fee = doctor['consultation_fee']
+            
+            # Insert consultation details into the consultations table
+            cursor.execute('INSERT INTO consultations (user_id, doctor_id, consultation_date, consultation_time, consultation_fee) VALUES (%s, %s, %s, %s, %s)', 
+                           (session['id'], doctor_id, consultation_date, consultation_time, consultation_fee))
+            mysql.connection.commit()
+            
+            # Flash a success message
+            flash('Consultation booked successfully', 'success')
+        else:
+            # Handle case where doctor with given ID is not found
+            flash('Doctor not found', 'error')
+        
+        cursor.close()
         return redirect(url_for('index'))
+    
     return redirect(url_for('login'))
+
+
 
 @app.route('/schedule_lab_test', methods=['POST'])
 def schedule_lab_test():
@@ -432,11 +520,25 @@ def schedule_lab_test():
         return redirect(url_for('index'))
     return redirect(url_for('login'))
 
+'''
 @app.route('/past_consultations')
 def past_consultations():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM consultations WHERE user_id = %s', (session['id'],))
+        consultations = cursor.fetchall()
+        return render_template('past_consultations.html', consultations=consultations)
+    return redirect(url_for('login'))'''
+@app.route('/past_consultations')
+def past_consultations():
+    if 'loggedin' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('''
+            SELECT c.id, c.doctor_id, c.consultation_date, c.consultation_time, c.consultation_fee
+            FROM consultations c
+            JOIN doctors d ON c.doctor_id = d.id
+            WHERE c.user_id = %s
+        ''', (session['id'],))
         consultations = cursor.fetchall()
         return render_template('past_consultations.html', consultations=consultations)
     return redirect(url_for('login'))
@@ -452,5 +554,6 @@ def past_lab_bookings():
 
 
 
+
 if __name__ == '__main__':
-    app.run(debug=True,port=6755)
+    app.run(debug=True,port=6800)
