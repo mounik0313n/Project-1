@@ -56,8 +56,8 @@ app.secret_key = 'your_secret_key'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Sudheer@123'
-app.config['MYSQL_DB'] = 'medicaldelivery'
+app.config['MYSQL_PASSWORD'] = 'pramod2805'
+app.config['MYSQL_DB'] = 'medicaldelivery5'
 
 mysql = MySQL(app)
 
@@ -375,6 +375,250 @@ def consultation1():
         return render_template('consultation.html', doctors=doctors)
     
     return redirect(url_for('login'))
+
+
+
+@app.route('/lab_tests1')
+def lab_tests1():
+    if 'loggedin' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM lab_tests1')
+        lab_tests = cursor.fetchall()
+        return render_template('lab_tests.html', lab_tests1=lab_tests1)
+    return redirect(url_for('login'))
+
+@app.route('/basic_health_screening')
+def basic_health_screening():
+    if 'loggedin' in session:
+        tests = ["Complete Blood Count (CBC)", "Basic Metabolic Panel (BMP)"]
+        return render_template('.html', title="Basic Health Screening", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/cardiovascular_health')
+def cardiovascular_health():
+    if 'loggedin' in session:
+        tests = ["High-Sensitivity C-Reactive Protein (hs-CRP)"]
+        return render_template('subcategory.html', title="Cardiovascular Health", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/diabetes_management')
+def diabetes_management():
+    if 'loggedin' in session:
+        tests = [
+            "Fasting Blood Sugar (FBS)",
+            "Hemoglobin A1c (HbA1c)"
+        ]
+        return render_template('subcategory.html', title="Diabetes Management", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/thyroid_function')
+def thyroid_function():
+    if 'loggedin' in session:
+        tests = [
+            "Thyroid Stimulating Hormone (TSH)",
+            "Free T4 (Thyroxine)",
+            "Free T3 (Triiodothyronine)"
+        ]
+        return render_template('subcategory.html', title="Thyroid Function", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/liver_function')
+def liver_function():
+    if 'loggedin' in session:
+        tests = [
+            "Liver Function Tests (LFTs)",
+            "Albumin"
+        ]
+        return render_template('subcategory.html', title="Liver Function", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/kidney_function')
+def kidney_function():
+    if 'loggedin' in session:
+        tests = [
+            "Blood Urea Nitrogen (BUN)",
+            "Serum Creatinine",
+            "Estimated Glomerular Filtration Rate (eGFR)"
+        ]
+        return render_template('subcategory.html', title="Kidney Function", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/infection_and_inflammation')
+def infection_and_inflammation():
+    if 'loggedin' in session:
+        tests = [
+            "C-Reactive Protein (CRP)",
+            "Erythrocyte Sedimentation Rate (ESR)",
+            "Blood Cultures"
+        ]
+        return render_template('subcategory.html', title="Infection and Inflammation", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/nutritional_and_vitamin_levels')
+def nutritional_and_vitamin_levels():
+    if 'loggedin' in session:
+        tests = [
+            "Vitamin D Test",
+            "Iron Studies"
+        ]
+        return render_template('subcategory.html', title="Nutritional and Vitamin Levels", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/hormonal_panels')
+def hormonal_panels():
+    if 'loggedin' in session:
+        tests = [
+            "Estrogen and Progesterone",
+            "Testosterone",
+            "Cortisol",
+            "Prolactin"
+        ]
+        return render_template('subcategory.html', title="Hormonal Panels", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/reproductive_health')
+def reproductive_health():
+    if 'loggedin' in session:
+        tests = [
+            "Human Chorionic Gonadotropin (hCG)",
+            "Follicle-Stimulating Hormone (FSH)",
+            "Luteinizing Hormone (LH)"
+        ]
+        return render_template('subcategory.html', title="Reproductive Health", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/autoimmune_disorders')
+def autoimmune_disorders():
+    if 'loggedin' in session:
+        tests = [
+            "Antinuclear Antibodies (ANA)",
+            "Rheumatoid Factor (RF)"
+        ]
+        return render_template('subcategory.html', title="Autoimmune Disorders", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/allergy_testing')
+def allergy_testing():
+    if 'loggedin' in session:
+        tests = [
+            "IgE Antibody Test",
+            "Skin Prick Test"
+        ]
+        return render_template('subcategory.html', title="Allergy Testing", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/cancer_markers')
+def cancer_markers():
+    if 'loggedin' in session:
+        tests = [
+            "Prostate-Specific Antigen (PSA)",
+            "CA-125",
+            "Carcinoembryonic Antigen (CEA)"
+        ]
+        return render_template('subcategory.html', title="Cancer Markers", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/genetic_testing')
+def genetic_testing():
+    if 'loggedin' in session:
+        tests = [
+            "BRCA1 and BRCA2",
+            "Carrier Screening"
+        ]
+        return render_template('subcategory.html', title="Genetic Testing", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/infectious_diseases')
+def infectious_diseases():
+    if 'loggedin' in session:
+        tests = [
+            "HIV Test",
+            "Hepatitis Panel",
+            "Tuberculosis (TB) Test"
+        ]
+        return render_template('subcategory.html', title="Infectious Diseases", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/urine_tests')
+def urine_tests():
+    if 'loggedin' in session:
+        tests = [
+            "Urinalysis",
+            "Urine Culture"
+        ]
+        return render_template('subcategory.html', title="Urine Tests", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/bone_health')
+def bone_health():
+    if 'loggedin' in session:
+        tests = [
+            "Bone Mineral Density (BMD) Test",
+            "Calcium Test"
+        ]
+        return render_template('subcategory.html', title="Bone Health", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/electrolyte_and_fluid_balance')
+def electrolyte_and_fluid_balance():
+    if 'loggedin' in session:
+        tests = [
+            "Sodium Test",
+            "Potassium Test",
+            "Chloride Test",
+            "Bicarbonate Test"
+        ]
+        return render_template('subcategory.html', title="Electrolyte and Fluid Balance", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/gastrointestinal_health')
+def gastrointestinal_health():
+    if 'loggedin' in session:
+        tests = [
+            "Helicobacter pylori (H. pylori) Test",
+            "Celiac Disease Panel",
+            "Lactose Intolerance Test"
+        ]
+        return render_template('subcategory.html', title="Gastrointestinal Health", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/toxicology_and_drug_testing')
+def toxicology_and_drug_testing():
+    if 'loggedin' in session:
+        tests = [
+            "Drug Abuse Panel",
+            "Heavy Metals Panel",
+            "Alcohol Testing"
+        ]
+        return render_template('subcategory.html', title="Toxicology and Drug Testing", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/immunology_and_serology')
+def immunology_and_serology():
+    if 'loggedin' in session:
+        tests = [
+            "Immunoglobulin Levels (IgA, IgG, IgM)",
+            "Rubella Antibody Test",
+            "Hepatitis Serology"
+        ]
+        return render_template('subcategory.html', title="Immunology and Serology", tests=tests)
+    return redirect(url_for('login'))
+
+@app.route('/neurological_tests')
+def neurological_tests():
+    if 'loggedin' in session:
+        tests = [
+            "Electroencephalogram (EEG)",
+            "Cerebrospinal Fluid (CSF) Analysis"
+        ]
+        return render_template('subcategory.html', title="Neurological Tests", tests=tests)
+    return redirect(url_for('login'))
+
+
+
+
+
+
 
 @app.route('/lab_tests')
 def lab_tests():
