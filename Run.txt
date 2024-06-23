@@ -60,3 +60,63 @@ To run your Flask project that includes database connectivity and HTML templates
 - Use virtual environments (`venv` or `virtualenv`) to manage Python dependencies and isolate your project environment.
 
 By following these steps, you should be able to run your Flask project successfully and interact with it through the web interface provided by your HTML templates. Adjustments might be needed based on specific environment configurations and project requirements.
+
+
+
+
+# Running the Medicine Delivery App
+
+## Prerequisites
+
+1. Ensure you have the following installed:
+   - Python (version 3.8 or higher)
+   - pip (Python package installer)
+   - Git
+
+## Clone the Repository
+
+1. Open your terminal or command prompt.
+2. Clone the repository from GitHub:
+3. Navigate to the project directory:
+
+## Set Up Virtual Environment
+
+1. Create a virtual environment:
+2. Activate the virtual environment:
+- On Windows:
+  ```
+  venv\Scripts\activate
+  ```
+- On macOS and Linux:
+  ```
+  source venv/bin/activate
+  ```
+
+## Install Dependencies
+
+1. Install the required Python packages:(pip install -r requirements.txt)
+
+## Set Up the Database
+
+1. Apply the database migrations to set up the database schema:
+
+## Create a Superuser
+
+1. Create a superuser account to access the admin interface:
+Follow the prompts to create a superuser account.
+
+## Run the Development Server
+
+1. Start the development server:
+2. Open your web browser and navigate to `http://127.0.0.1:8000/` to access the application.
+
+## Access the Admin Interface
+
+1. Navigate to `http://127.0.0.1:8000/admin/` to access the admin interface.
+2. Log in using the superuser credentials you created earlier.
+
+## Running the Tests
+
+1. Run the tests to ensure everything is working correctly:
+
+
