@@ -44,7 +44,7 @@
                 <label for="consultation_id">Select a Doctor:</label>
                 <select id="consultation_id" name="consultation_id" class="form-control" required>
                     {% for doctor in doctors %}
-                        <option value="{{ doctor.id }}">{{ doctor.name }} - {{ doctor.specialty }} - ${{ doctor.consultation_fee }}</option>
+                        <option value="{{ doctor.id }}">{{ doctor.name }} - {{ doctor.specialty }} - Rs.{{ doctor.consultation_fee }}</option>
                     {% endfor %}
                 </select>
             </div>
