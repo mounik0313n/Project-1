@@ -3,9 +3,6 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 import google.generativeai as genai
-# from google.generativeai import get_chat_response
-
-
 
 API_KEY = 'AIzaSyCCrYnLhDIgToWeG4u_nPpQcB9uNJMze0U'
 genai.configure(api_key=API_KEY)
@@ -44,11 +41,6 @@ medical_keywords = [
     'microbiology test', 'serology test', 'immunology test', 'radiology test', 
     'PCR test', 'MRI scan', 'CT scan', 'X-ray', 'ultrasound'
 ]
-
-
-
-
-
 
 app = Flask(__name__)
 
@@ -615,17 +607,11 @@ def neurological_tests():
     return redirect(url_for('login'))
 
 
-
-
-
-
-
 @app.route('/lab_tests')
 def lab_tests():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         
-        # Fetch lab tests
         cursor.execute('SELECT * FROM lab_tests')
         lab_tests = cursor.fetchall()
         
@@ -722,12 +708,6 @@ def ask():
 
 def is_medical_query(query):
     return any(keyword in query.lower() for keyword in medical_keywords)
-# Route to handle the user's question
-
-
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True,port=6801)
