@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,6 +94,28 @@
 .add-to-cart-btn:hover {
     background-color: #00695C;
 }
+.pincode-form {
+            text-align: top;
+        }
+
+        .pincode-form input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        .pincode-form button {
+            padding: 10px 20px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
 .schedule-test-btn {
     position: fixed;
@@ -122,132 +145,139 @@
     <div class="content">
         <h1>Lab Tests</h1>
         <div class="lab-tests">
+            <div class="pincode-form">
+                <form method="POST" action="{{ url_for('tests_by_pincode') }}">
+                    <label for="pincode">Enter Pincode:</label>
+                    <input type="text" id="pincode" name="pincode" required>
+                    <button type="submit">Check Availability</button>
+                </form>
+            </div>
             <div class="test">
-                <h2><a href="basic_health_screening.html">Basic Health Screening</a></h2>
+                <h2><a href="/basic_health_screening">Basic Health Screening</a></h2>
                 <p>$100 onwards</p>
             </div>
             
             <div class="test">
-                <h2><a href="cardiovascular_health.html">Cardiovascular Health</a></h2>
+                <h2><a href="/cardiovascular_health">Cardiovascular Health</a></h2>
                 <p>$150 onwards</p>
             </div>
             
             <div class="test">
-                <h2><a href="diabetes_management.html">Diabetes Management</a></h2>
+                <h2><a href="/diabetes_management">Diabetes Management</a></h2>
                 <p>$60 onwards</p>
             </div>
                 <div class="test">
-                    <h2><a href="thyroid_function.html">Thyroid Function</a></h2>
+                    <h2><a href="/thyroid_function">Thyroid Function</a></h2>
                     <p>$80 onwards</p>
                 </div>
                 
                 <div class="test">
-                    <h2><a href="liver_function.html">Liver Function</a></h2>
+                    <h2><a href="/liver_function">Liver Function</a></h2>
                     <p>$60 onwards</p>
                 </div>
                 
                 <div class="test">
-                    <h2><a href="kidney_function.html">Kidney Function</a></h2>
+                    <h2><a href="/kidney_function">Kidney Function</a></h2>
                     <p>$65 onwards</p>
                 </div>
                     
                 <div class="test">
-                        <h2><a href="infection_inflammation.html">Infection and Inflammation</a></h2>
+                        <h2><a href="/infection_and_inflammation">Infection and Inflammation</a></h2>
                         <p>$50 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="nutritional_vitamin_levels.html">Nutritional and Vitamin Levels</a></h2>
+                        <h2><a href="/nutritional_and_vitamin_levels">Nutritional and Vitamin Levels</a></h2>
                         <p>$90 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="hormonal_panels.html">Hormonal Panels</a></h2>
+                        <h2><a href="/hormonal_panels">Hormonal Panels</a></h2>
                         <p>$110 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="reproductive_health.html">Reproductive Health</a></h2>
+                        <h2><a href="/reproductive_health">Reproductive Health</a></h2>
                         <p>$120 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="autoimmune_disorders.html">Autoimmune Disorders</a></h2>
+                        <h2><a href="/autoimmune_disorders">Autoimmune Disorders</a></h2>
                         <p>$130 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="allergy_testing.html">Allergy Testing</a></h2>
+                        <h2><a href="/allergy_testing">Allergy Testing</a></h2>
                         <p>$70 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="cancer_markers.html">Cancer Markers</a></h2>
+                        <h2><a href="/cancer_markers">Cancer Markers</a></h2>
                         <p>$200 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="genetic_testing.html">Genetic Testing</a></h2>
+                        <h2><a href="/genetic_testing">Genetic Testing</a></h2>
                         <p>$250 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="infectious_diseases.html">Infectious Diseases</a></h2>
+                        <h2><a href="/infectious_diseases">Infectious Diseases</a></h2>
                         <p>$140 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="urine_tests.html">Urine Tests</a></h2>
+                        <h2><a href="/urine_tests">Urine Tests</a></h2>
                         <p>$30 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="bone_health.html">Bone Health</a></h2>
+                        <h2><a href="/bone_health">Bone Health</a></h2>
                         <p>80 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="electrolyte_balance.html">Electrolyte and Fluid Balance</a></h2>
+                        <h2><a href="/electrolyte_and_fluid_balance">Electrolyte and Fluid Balance</a></h2>
                         <p>$55 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="gastrointestinal_health.html">Gastrointestinal Health</a></h2>
+                        <h2><a href="/gastrointestinal_health">Gastrointestinal Health</a></h2>
                         <p>$90 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="toxicology_drug_testing.html">Toxicology and Drug Testing</a></h2>
+                        <h2><a href="/toxicology_and_drug_testing">Toxicology and Drug Testing</a></h2>
                         <p>$100 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="immunology_serology.html">Immunology and Serology</a></h2>
+                        <h2><a href="/immunologyand_serology">Immunology and Serology</a></h2>
                         <p>$110 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="endocrine_system.html">Endocrine System</a></h2>
+                        <h2><a href="/endocrine_system">Endocrine System</a></h2>
                         <p>$120 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="rheumatology.html">Rheumatology</a></h2>
+                        <h2><a href="/rheumatology">Rheumatology</a></h2>
                         <p>$130 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="dermatology.html">Dermatology</a></h2>
+                        <h2><a href="/dermatology">Dermatology</a></h2>
                         <p>$70 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="ophthalmology.html">Ophthalmology</a></h2>
+                        <h2><a href="/ophthalmology">Ophthalmology</a></h2>
                         <p>$90 onwards</p>
                     </div>
                     
                     <div class="test">
-                        <h2><a href="neurology.html">Neurology</a></h2>
+                        <h2><a href="/neurology">Neurology</a></h2>
                         <p>$150 onwards</p>
                     </div>
                 </div>

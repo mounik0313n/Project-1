@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session,jsonify
+from flask import Flask, render_template, request, redirect, url_for, session,jsonify,flash
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
@@ -11,6 +11,7 @@ import google.generativeai as genai
 from sklearn.linear_model import LinearRegression
 import pandas as pd
 import numpy as np
+
 
 csv_path = 'diabetes.csv'  
 data = pd.read_csv(csv_path)
@@ -75,7 +76,7 @@ app.secret_key = 'your_secret_key'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Sudheer@123'
+app.config['MYSQL_PASSWORD'] = 'pramod2805'
 app.config['MYSQL_DB'] = 'medicaldelivery101'
 
 mysql = MySQL(app)
@@ -349,7 +350,6 @@ def add_doctor():
         consultation_fee = request.form['consultation_fee']
         doctor_status = request.form.get('doctor_status', 'Available')  # Default to 'Available' if not provided
         
-        # Validate form data
         if not (name and specialty and consultation_fee):
             flash('Please fill out all required fields.', 'error')
             return redirect(url_for('admin_dashboard'))
@@ -425,6 +425,7 @@ def consultation1():
 
 
 
+
 @app.route('/lab_tests1')
 def lab_tests1():
     if 'loggedin' in session:
@@ -434,233 +435,260 @@ def lab_tests1():
         return render_template('lab_tests.html', lab_tests1=lab_tests1)
     return redirect(url_for('login'))
 
+
 @app.route('/basic_health_screening')
 def basic_health_screening():
-    if 'loggedin' in session:
-        tests = ["Complete Blood Count (CBC)", "Basic Metabolic Panel (BMP)"]
-        return render_template('.html', title="Basic Health Screening", tests=tests)
-    return redirect(url_for('login'))
+    tests = ["Complete Blood Count (CBC)", "Basic Metabolic Panel (BMP)"]
+    return  render_template("basic_health_screening.html",title="Basic Health Screening", tests=tests)
 
 @app.route('/cardiovascular_health')
 def cardiovascular_health():
-    if 'loggedin' in session:
-        tests = ["High-Sensitivity C-Reactive Protein (hs-CRP)"]
-        return render_template('subcategory.html', title="Cardiovascular Health", tests=tests)
-    return redirect(url_for('login'))
+    tests = ["High-Sensitivity C-Reactive Protein (hs-CRP)"]
+    return render_template('cardiovascular_health.html', title="Cardiovascular Health", tests=tests)
 
 @app.route('/diabetes_management')
 def diabetes_management():
-    if 'loggedin' in session:
         tests = [
             "Fasting Blood Sugar (FBS)",
             "Hemoglobin A1c (HbA1c)"
         ]
-        return render_template('subcategory.html', title="Diabetes Management", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('diabetes_management.html', title="Diabetes Management", tests=tests)
 
 @app.route('/thyroid_function')
 def thyroid_function():
-    if 'loggedin' in session:
         tests = [
             "Thyroid Stimulating Hormone (TSH)",
             "Free T4 (Thyroxine)",
             "Free T3 (Triiodothyronine)"
         ]
-        return render_template('subcategory.html', title="Thyroid Function", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('thyroid_function.html', title="Thyroid Function", tests=tests)
 
 @app.route('/liver_function')
 def liver_function():
-    if 'loggedin' in session:
         tests = [
             "Liver Function Tests (LFTs)",
             "Albumin"
         ]
-        return render_template('subcategory.html', title="Liver Function", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('liver_function.html', title="Liver Function", tests=tests)
 
 @app.route('/kidney_function')
 def kidney_function():
-    if 'loggedin' in session:
         tests = [
             "Blood Urea Nitrogen (BUN)",
             "Serum Creatinine",
             "Estimated Glomerular Filtration Rate (eGFR)"
         ]
-        return render_template('subcategory.html', title="Kidney Function", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('kidney_function.html', title="Kidney Function", tests=tests)
 
 @app.route('/infection_and_inflammation')
 def infection_and_inflammation():
-    if 'loggedin' in session:
         tests = [
             "C-Reactive Protein (CRP)",
             "Erythrocyte Sedimentation Rate (ESR)",
             "Blood Cultures"
         ]
-        return render_template('subcategory.html', title="Infection and Inflammation", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('infection_and_inflammation.html', title="Infection and Inflammation", tests=tests)
 
 @app.route('/nutritional_and_vitamin_levels')
 def nutritional_and_vitamin_levels():
-    if 'loggedin' in session:
         tests = [
             "Vitamin D Test",
             "Iron Studies"
         ]
-        return render_template('subcategory.html', title="Nutritional and Vitamin Levels", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('nutritional_and_vitamin_levels.html', title="Nutritional and Vitamin Levels", tests=tests)
 
 @app.route('/hormonal_panels')
 def hormonal_panels():
-    if 'loggedin' in session:
         tests = [
             "Estrogen and Progesterone",
             "Testosterone",
             "Cortisol",
             "Prolactin"
         ]
-        return render_template('subcategory.html', title="Hormonal Panels", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('hormonal_panels.html', title="Hormonal Panels", tests=tests)
 
 @app.route('/reproductive_health')
 def reproductive_health():
-    if 'loggedin' in session:
         tests = [
             "Human Chorionic Gonadotropin (hCG)",
             "Follicle-Stimulating Hormone (FSH)",
             "Luteinizing Hormone (LH)"
         ]
-        return render_template('subcategory.html', title="Reproductive Health", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('reproductive_health.html', title="Reproductive Health", tests=tests)
 
 @app.route('/autoimmune_disorders')
 def autoimmune_disorders():
-    if 'loggedin' in session:
         tests = [
             "Antinuclear Antibodies (ANA)",
             "Rheumatoid Factor (RF)"
         ]
-        return render_template('subcategory.html', title="Autoimmune Disorders", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('autoimmune_disorders.html', title="Autoimmune Disorders", tests=tests)
 
 @app.route('/allergy_testing')
 def allergy_testing():
-    if 'loggedin' in session:
         tests = [
             "IgE Antibody Test",
             "Skin Prick Test"
         ]
-        return render_template('subcategory.html', title="Allergy Testing", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('allergy_testing.html', title="Allergy Testing", tests=tests)
 
 @app.route('/cancer_markers')
 def cancer_markers():
-    if 'loggedin' in session:
         tests = [
             "Prostate-Specific Antigen (PSA)",
             "CA-125",
             "Carcinoembryonic Antigen (CEA)"
         ]
-        return render_template('subcategory.html', title="Cancer Markers", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('cancer_markers.html', title="Cancer Markers", tests=tests)
 
 @app.route('/genetic_testing')
 def genetic_testing():
-    if 'loggedin' in session:
         tests = [
             "BRCA1 and BRCA2",
             "Carrier Screening"
         ]
-        return render_template('subcategory.html', title="Genetic Testing", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('genetic_testing.html', title="Genetic Testing", tests=tests)
 
 @app.route('/infectious_diseases')
 def infectious_diseases():
-    if 'loggedin' in session:
         tests = [
             "HIV Test",
             "Hepatitis Panel",
             "Tuberculosis (TB) Test"
         ]
-        return render_template('subcategory.html', title="Infectious Diseases", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('infectious_diseases.html', title="Infectious Diseases", tests=tests)
 
 @app.route('/urine_tests')
 def urine_tests():
-    if 'loggedin' in session:
         tests = [
             "Urinalysis",
             "Urine Culture"
         ]
-        return render_template('subcategory.html', title="Urine Tests", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('urine_tests.html', title="Urine Tests", tests=tests)
 
 @app.route('/bone_health')
 def bone_health():
-    if 'loggedin' in session:
         tests = [
             "Bone Mineral Density (BMD) Test",
             "Calcium Test"
         ]
-        return render_template('subcategory.html', title="Bone Health", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('bone_health.html', title="Bone Health", tests=tests)
 
 @app.route('/electrolyte_and_fluid_balance')
 def electrolyte_and_fluid_balance():
-    if 'loggedin' in session:
         tests = [
             "Sodium Test",
             "Potassium Test",
             "Chloride Test",
             "Bicarbonate Test"
         ]
-        return render_template('subcategory.html', title="Electrolyte and Fluid Balance", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('electrolyte_and_fluid_balance.html', title="Electrolyte and Fluid Balance", tests=tests)
 
 @app.route('/gastrointestinal_health')
 def gastrointestinal_health():
-    if 'loggedin' in session:
         tests = [
             "Helicobacter pylori (H. pylori) Test",
             "Celiac Disease Panel",
             "Lactose Intolerance Test"
         ]
-        return render_template('subcategory.html', title="Gastrointestinal Health", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('gastrointestinal_health.html', title="Gastrointestinal Health", tests=tests)
 
 @app.route('/toxicology_and_drug_testing')
 def toxicology_and_drug_testing():
-    if 'loggedin' in session:
         tests = [
             "Drug Abuse Panel",
             "Heavy Metals Panel",
             "Alcohol Testing"
         ]
-        return render_template('subcategory.html', title="Toxicology and Drug Testing", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('toxicology_and_drug_testing.html', title="Toxicology and Drug Testing", tests=tests)
 
 @app.route('/immunology_and_serology')
 def immunology_and_serology():
-    if 'loggedin' in session:
         tests = [
             "Immunoglobulin Levels (IgA, IgG, IgM)",
             "Rubella Antibody Test",
             "Hepatitis Serology"
         ]
-        return render_template('subcategory.html', title="Immunology and Serology", tests=tests)
-    return redirect(url_for('login'))
+        return render_template('immunology_and_serology.html', title="Immunology and Serology", tests=tests)
 
-@app.route('/neurological_tests')
-def neurological_tests():
-    if 'loggedin' in session:
-        tests = [
-            "Electroencephalogram (EEG)",
-            "Cerebrospinal Fluid (CSF) Analysis"
-        ]
-        return render_template('subcategory.html', title="Neurological Tests", tests=tests)
-    return redirect(url_for('login'))
+@app.route('/endocrine_system')
+def endocrine_system():
+    tests = [
+"Adrenocorticotropic Hormone (ACTH)",
+"Parathyroid Hormone (PTH)",
+"Insulin Test"
+]
+    return render_template('endocrine_system.html', title="Endocrine System", tests=tests)
 
+@app.route('/rheumatology')
+def rheumatology():
+    tests = [
+"Anticitrullinated Protein Antibody (ACPA)",
+"Anti-Smith (Anti-Sm) Antibodies"
+]
+    return render_template('rheumatology.html', title="Rheumatology", tests=tests)
+
+@app.route('/neurology')
+def neurology():
+    tests = [
+"Electroencephalogram (EEG)",
+"Nerve Conduction Studies"
+]
+    return render_template('neurology.html', title="Neurology", tests=tests)
+
+@app.route('/ophthalmology')
+def ophthalmology():
+    tests = [
+"Ocular Pressure Test (Tonometry)",
+"Retinal Exam"
+]
+    return render_template('ophthalmology.html', title="Ophthalmology", tests=tests)
+
+@app.route('/dermatology')
+def dermatology():
+    tests = [
+"Skin Biopsy",
+"Patch Testing"
+]
+    return render_template('dermatology.html', title="Dermatology", tests=tests)
+
+
+@app.route('/tests_by_pincode', methods=['POST'])
+def tests_by_pincode():
+        pincode = request.form.get('pincode')
+        tests_by_pincode_data = {
+            '123456': ['Basic Health Screening', 'Cardiovascular Health'],
+            '789012': ['Diabetes Management', 'Liver Function'],
+            '345678': ['Thyroid Function', 'Kidney Function'],
+            '111222': ['Infection and Inflammation'],
+            '333444': ['Nutritional and Vitamin Levels'],
+            '555666': ['Hormonal Panels'],
+            '777888': ['Reproductive Health'],
+            '999000': ['Autoimmune Disorders'],
+            '121212': ['Allergy Testing'],
+            '232323': ['Cancer Markers'],
+            '343434': ['Genetic Testing'],
+            '454545': ['Infectious Diseases'],
+            '565656': ['Urine Tests'],
+            '676767': ['Bone Health'],
+            '787878': ['Electrolyte and Fluid Balance'],
+            '898989': ['Gastrointestinal Health'],
+            '909090': ['Toxicology and Drug Testing'],
+            '101010': ['Immunology and Serology'],
+            '111111': ['Endocrine System'],
+            '121212': ['Rheumatology'],
+            '131313': ['Dermatology'],
+            '141414': ['Ophthalmology'],
+            '151515': ['Neurology']
+        }
+
+        tests = tests_by_pincode_data.get(pincode, [])
+
+        if not tests:
+            flash('No tests available for this pincode', 'danger')
+            return redirect(url_for('lab_tests1'))
+
+        return render_template('tests_by_pincode.html', pincode=pincode, tests=tests)
 
 
 
@@ -709,9 +737,9 @@ def book_consultation():
             flash('Doctor not found', 'error')
         
         cursor.close()
-        return redirect(url_for('index'))  # Redirect to index after processing
+        return redirect(url_for('index')) 
         
-    return redirect(url_for('login'))  # Redirect to login if not logged in
+    return redirect(url_for('login'))  
 
 
 
@@ -747,11 +775,15 @@ def past_consultations():
 def past_lab_bookings():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM user_lab_tests WHERE user_id = %s', (session['id'],))
+        cursor.execute('''
+            SELECT ult.*, lt.name as lab_test_name 
+            FROM user_lab_tests ult 
+            JOIN lab_tests lt ON ult.lab_test_id = lt.id 
+            WHERE ult.user_id = %s
+        ''', (session['id'],))
         lab_bookings = cursor.fetchall()
         return render_template('past_lab_bookings.html', lab_bookings=lab_bookings)
     return redirect(url_for('login'))
-
 
 
 
@@ -773,7 +805,7 @@ def ask():
 
 def is_medical_query(query):
     return any(keyword in query.lower() for keyword in medical_keywords)
-# Route to handle the user's question
+
 
 
 

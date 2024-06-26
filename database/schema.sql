@@ -1,6 +1,6 @@
-create database medicaldelivery1;
+CREATE DATABASE medicaldelivery101;
 
-use medicaldelivery1;
+USE medicaldelivery101;
 -- Users table
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -19,8 +19,10 @@ CREATE TABLE users (
 CREATE TABLE medicines (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL
+    price DECIMAL(10, 2) NOT NULL,
+    image_url VARCHAR(255) DEFAULT NULL  -- Adding the image_url column with a default value of NULL
 );
+
 
 -- Cart table
 CREATE TABLE cart (
@@ -63,176 +65,80 @@ CREATE TABLE user_lab_tests (
     FOREIGN KEY (lab_test_id) REFERENCES lab_tests(id) ON DELETE CASCADE
 );
 
-
-
--- Create the doctors table
-CREATE TABLE IF NOT EXISTS doctors (
+-- Doctors table
+CREATE TABLE doctors (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     specialty VARCHAR(100) NOT NULL,
     consultation_fee INT NOT NULL,
-    doctors_status VARCHAR(255) NOT NULL,
-    doctors_password VARCHAR(255) NOT NULL
+    doctors_status VARCHAR(255) NOT NULL DEFAULT 'Available',
+    doctors_password VARCHAR(255) NOT NULL DEFAULT 12345,
+    INDEX idx_name (name) -- Add an index on the name column
 );
-ALTER TABLE doctors
-ADD COLUMN doctors_status VARCHAR(255) NOT NULL;
-
-
-
-
--- Insert sample data into doctors table
-INSERT INTO doctors (name, specialty, consultation_fee) VALUES 
-('Dr. John Smith', 'Cardiology', 150),
-('Dr. Jane Doe', 'Dermatology', 100),
-('Dr. Alice Brown', 'Pediatrics', 120);
-
 
 -- Consultations table
 CREATE TABLE consultations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     doctor_id INT NOT NULL,
+    doctor_name VARCHAR(100) DEFAULT NULL,
     consultation_date DATE NOT NULL,
-    doctor_name varchar,
     notes TEXT,
     consultation_fee INT NOT NULL,
     consultation_time TIME NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE
-    FOREIGN KEY (name) REFERENCES doctors(name) ON DELETE CASCADE
 );
 
--- 
-CREATE TABLE consultations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    doctor_id INT NOT NULL,
-    doctor_name VARCHAR(100) NOT NULL,
-    consultation_date DATE NOT NULL,
-    notes TEXT,
-    consultation_fee INT NOT NULL,
-    consultation_time TIME NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE,
-    FOREIGN KEY (doctor_name) REFERENCES doctors(name) ON DELETE CASCADE
-);
-
-
-DROP table doctors;
-INSERT INTO consultations (user_id, doctor_id, consultation_date, notes, consultation_fee, consultation_time)
-SELECT 1, id, '2024-06-21', 'Routine check-up', consultation_fee, '10:00:00'
-FROM doctors
-WHERE id = 1;
-
-select * from doctors;
-SHOW TABLES;
+-- Insert sample data into doctors table
+INSERT INTO doctors (name, specialty, consultation_fee, doctors_status, doctors_password) VALUES
+('Dr. John Smith', 'Cardiology', 150, 'Active', 'password123'),
+('Dr. Jane Doe', 'Dermatology', 100, 'Active', 'securepass'),
+('Dr. Alice Brown', 'Pediatrics', 120, 'Active', 'letmein'),
+('Dr. Ravi Kumar', 'Cardiologist', 500, 'Active', 'password123'),
+('Dr. Priya Sharma', 'Dermatologist', 400, 'Active', 'securepass'),
+('Dr. Rajesh Singh', 'Pediatrician', 300, 'Active', 'letmein');
 
 
 
-INSERT INTO medicines (name, price) VALUES 
-('Paracetamol', 1.00),
-('Ibuprofen', 1.50),
-('Amoxicillin', 3.00),
-('Aspirin', 2.00),
-('Cough Syrup', 4.50),
-('Antacid', 2.50),
-('Vitamin C', 3.00),
-('Insulin', 5.00); 
 
 
-INSERT INTO medicines (name, price)
-VALUES ('Hydrochlorothiazide', 50.00),
-       ('Prednisone', 70.00),
-       ('Losartan', 55.00),
-       ('Levothyroxine', 65.00),
-       ('Atorvastatin', 80.00),
-       ('Clopidogrel', 45.00),
-       ('Fluoxetine', 90.00),
-       ('Warfarin', 85.00),
-       ('Simvastatin', 75.00),
-       ('Montelukast', 60.00),
-       ('Loratadine', 25.00),
-       ('Metoprolol', 40.00),
-       ('Furosemide', 50.00),
-       ('Gabapentin', 85.00),
-       ('Tramadol', 95.00),
-       ('Citalopram', 70.00),
-       ('Azithromycin', 120.00),
-       ('Doxycycline', 110.00),
-       ('Escitalopram', 105.00),
-       ('Albuterol', 130.00);
-       
-       
-       
 INSERT INTO lab_tests (name, description, price) VALUES 
-('Complete Blood Count (CBC)', 'A test used to evaluate your overall health and detect a variety of disorders, including anemia, infection, and leukemia.', 50.00),
-('Lipid Profile', 'A panel of blood tests that serves as an initial broad medical screening tool for abnormalities in lipids, such as cholesterol and triglycerides.', 75.00),
-('Liver Function Test (LFT)', 'A group of blood tests that provide information about the state of a patient\'s liver.', 60.00),
-('Kidney Function Test (KFT)', 'Tests used to check how well the kidneys are working.', 65.00),
-('Thyroid Function Test (TFT)', 'A collective term for blood tests used to check the function of the thyroid.', 80.00),
-('Blood Glucose Test', 'A test that measures the amount of glucose (sugar) in your blood.', 40.00);
+('Basic Health Screening', 'General overview of health status.', 100.00 ),
+('Cardiovascular Health', 'Evaluation of heart and blood vessel function.', 150.00),
+('Diabetes Management', 'Monitoring and managing blood sugar levels.', 60.00),
+('Thyroid Function', 'Assessment of thyroid gland performance.', 80.00),
+('Liver Function', 'Analysis of liver enzyme levels.', 60.00),
+('Kidney Function', 'Assessment of kidney health.', 65.00),
+('Infection and Inflammation', 'Detection of infections and inflammatory conditions.', 50.00),
+('Nutritional and Vitamin Levels', 'Measurement of vitamin and nutrient levels.', 90.00),
+('Hormonal Panels', 'Assessment of hormone levels in the body.', 110.00),
+('Reproductive Health', 'Evaluation of reproductive system health.', 120.00),
+('Autoimmune Disorders', 'Detection of autoimmune diseases.', 130.00),
+('Allergy Testing', 'Identification of allergic reactions.', 70.00),
+('Cancer Markers', 'Screening for cancer indicators.', 200.00),
+('Genetic Testing', 'Analysis of genetic predispositions.', 250.00),
+('Infectious Diseases', 'Testing for infectious diseases.', 140.00),
+('Urine Tests', 'Analysis of urine for various health indicators.', 30.00),
+('Bone Health', 'Assessment of bone density and health.', 80.00),
+('Electrolyte and Fluid Balance', 'Measurement of electrolyte levels.', 55.00),
+('Gastrointestinal Health', 'Evaluation of digestive system health.', 90.00),
+('Toxicology and Drug Testing', 'Screening for drugs and toxins.', 100.00),
+('Immunology and Serology', 'Assessment of immune system function.', 110.00),
+('Endocrine System', 'Evaluation of endocrine gland function.', 120.00),
+('Rheumatology', 'Assessment for rheumatic diseases.', 130.00),
+('Dermatology', 'Evaluation of skin health.', 70.00),
+('Ophthalmology', 'Assessment of eye health.', 90.00),
+('Neurology', 'Evaluation of nervous system health.', 150.00);
 
-       
-INSERT INTO doctors (name, specialty) VALUES 
-('Dr. John Doe', 'Cardiologist'),
-('Dr. Jane Smith', 'Dermatologist'),
-('Dr. Emily Johnson', 'General Physician'),
-('Dr. Michael Brown', 'Pediatrician'),
-('Dr. William Davis', 'Orthopedic Surgeon'),
-('Dr. Linda Martinez', 'Gynecologist'); 
-select *from doctors;
-ALTER TABLE doctors
-ADD COLUMN doctor_status VARCHAR(20) NOT NULL DEFAULT 'Available';
 
-ALTER TABLE doctors
-MODIFY COLUMN doctor_status VARCHAR(255) NOT NULL DEFAULT 'Available';
-
-ALTER TABLE doctors
-MODIFY COLUMN doctors_status VARCHAR(20) DEFAULT 'active';
-
-
-ALTER TABLE doctors
-DROP COLUMN doctors_password;
-
-DROP TABLE consultations;
-
--- Disable safe update mode
-SET SQL_SAFE_UPDATES = 0;
-
--- Check if the consultation_fee column exists, and add it if it doesn't
-ALTER TABLE doctors
-ADD COLUMN IF NOT EXISTS consultation_fee INT NOT NULL;
-
--- Insert sample data into doctors table if not already present
-INSERT INTO doctors (name, specialty, consultation_fee)
-SELECT * FROM (SELECT 'Dr. John Smith', 'Cardiology', 150) AS tmp
-WHERE NOT EXISTS (
-    SELECT name FROM doctors WHERE name = 'Dr. John Smith' AND specialty = 'Cardiology' AND consultation_fee = 150
-) LIMIT 1;
-
-INSERT INTO doctors (name, specialty, consultation_fee)
-SELECT * FROM (SELECT 'Dr. Jane Doe', 'Dermatology', 100) AS tmp
-WHERE NOT EXISTS (
-    SELECT name FROM doctors WHERE name = 'Dr. Jane Doe' AND specialty = 'Dermatology' AND consultation_fee = 100
-) LIMIT 1;
-
-INSERT INTO doctors (name, specialty, consultation_fee)
-SELECT * FROM (SELECT 'Dr. Alice Brown', 'Pediatrics', 120) AS tmp
-WHERE NOT EXISTS (
-    SELECT name FROM doctors WHERE name = 'Dr. Alice Brown' AND specialty = 'Pediatrics' AND consultation_fee = 120
-) LIMIT 1;
-
--- Insert a new consultation using the consultation_fee from the doctors table
-INSERT INTO consultations (user_id, doctor_id, consultation_date, notes, consultation_fee, consultation_time)
-SELECT 1, id, '2024-06-21', 'Routine check-up', consultation_fee, '10:00:00'
-FROM doctors
-WHERE id = 1;
 
 CREATE TABLE lab_tests1(
     id INT AUTO_INCREMENT PRIMARY KEY,
 	category VARCHAR(255) NOT NULL,
     test_name VARCHAR(255) NOT NULL
 );
+
 INSERT INTO lab_tests1 (category, test_name) VALUES
 ('Basic Health Screening', 'Complete Blood Count (CBC)'),
 ('Basic Health Screening', 'Basic Metabolic Panel (BMP)'),
@@ -300,34 +206,33 @@ INSERT INTO lab_tests1 (category, test_name) VALUES
 ('Neurology', 'Electroencephalogram (EEG)'),
 ('Neurology', 'Nerve Conduction Studies');
 
-CREATE TABLE doctors (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    specialty VARCHAR(100) NOT NULL,
-    consultation_fee INT NOT NULL,
-    doctors_status VARCHAR(255) NOT NULL,
-    doctors_password VARCHAR(255) NOT NULL,
-    INDEX idx_name (name)  -- Add an index on the name column
-);
 
-CREATE TABLE consultations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    doctor_id INT NOT NULL,
-    doctor_name VARCHAR(100) NOT NULL,
-    consultation_date DATE NOT NULL,
-    notes TEXT,
-    consultation_fee INT NOT NULL,
-    consultation_time TIME NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE,
-    FOREIGN KEY (doctor_name) REFERENCES doctors(name) ON DELETE CASCADE
-);
-INSERT INTO doctors (name, specialty, consultation_fee, doctors_status, doctors_password)
-VALUES
-('Dr. Ravi Kumar', 'Cardiologist', 500, 'Active', 'password123'),
-('Dr. Priya Sharma', 'Dermatologist', 400, 'Active', 'securepass'),
-('Dr. Rajesh Singh', 'Pediatrician', 300, 'Active', 'letmein');
-
-ALTER TABLE consultations
-MODIFY COLUMN doctor_name VARCHAR(100) DEFAULT NULL;
+INSERT INTO medicines (name, price, image_url) VALUES
+('Paracetamol', 1.00, 'C.jpg'),
+('Ibuprofen', 1.50, 'D.jpg'),
+('Amoxicillin', 3.00, 'A.jpg'),
+('Aspirin', 2.00, 'B.jpg'),
+('Cough Syrup', 4.50, 'C.jpg'),
+('Antacid', 2.50, 'D.jpg'),
+('Vitamin C', 3.00, 'A.jpg'),
+('Insulin', 5.00, 'B.jpg'),
+('Hydrochlorothiazide', 50.00, 'C.jpg'),
+('Prednisone', 70.00, 'D.jpg'),
+('Losartan', 55.00, 'A.jpg'),
+('Levothyroxine', 65.00, 'B.jpg'),
+('Atorvastatin', 80.00, 'C.jpg'),
+('Clopidogrel', 45.00, 'D.jpg'),
+('Fluoxetine', 90.00, 'A.jpg'),
+('Warfarin', 85.00, 'B.jpg'),
+('Simvastatin', 75.00, 'C.jpg'),
+('Montelukast', 60.00, 'D.jpg'),
+('Loratadine', 25.00, 'A.jpg'),
+('Metoprolol', 40.00, 'B.jpg'),
+('Furosemide', 50.00, 'C.jpg'),
+('Gabapentin', 85.00, 'D.jpg'),
+('Tramadol', 95.00, 'A.jpg'),
+('Citalopram', 70.00, 'B.jpg'),
+('Azithromycin', 120.00, 'C.jpg'),
+('Doxycycline', 110.00, 'D.jpg'),
+('Escitalopram', 105.00, 'A.jpg'),
+('Albuterol', 130.00, 'B.jpg');
