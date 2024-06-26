@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,59 +7,118 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            font-family: Arial, sans-serif;
         }
         .container {
-            background-color: #fff;
-            padding: 30px;
+            background-color: #ffffff;
+            padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
         h1 {
-            color: #6f42c1; /* Violet color */
+            color: #6f42c1;
+            font-weight: 700;
         }
         .form-group {
-            position: relative;
             margin-bottom: 1.5rem;
         }
         .form-control:focus {
-            border-color: #ffc107; /* Yellow color */
+            border-color: #ffc107;
             box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
         }
         .btn-primary {
-            background-color: #6f42c1; /* Violet color */
-            border-color: #6f42c1; /* Violet color */
+            background-color: #6f42c1;
+            border-color: #6f42c1;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 10px 20px;
         }
         .btn-primary:hover {
-            background-color: #5a32a3; /* Darker violet */
-            border-color: #482584; /* Even darker violet */
+            background-color: #5a32a3;
+            border-color: #482584;
+        }
+        .doctor-card {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            transition: border-color 0.3s;
+        }
+        .doctor-card:hover {
+            border-color: #ffc107;
+        }
+        .doctor-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .doctor-info {
+            flex-grow: 1;
+        }
+        .doctor-info strong {
+            font-size: 1.1rem;
+            color: #6f42c1;
+        }
+        .doctor-info small {
+            color: #6c757d;
+        }
+        .rating {
+            color: #ffc107;
+        }
+        .form-label {
+            font-weight: bold;
+            color: #6f42c1;
         }
     </style>
 </head>
 <body>
+    <!-- Doctor Selection and Booking Form -->
     <div class="container">
-        <h1 class="mt-5">Book a Consultation</h1>
+        <h1 class="mt-5">Schedule Your Consultation</h1>
         <form action="/book_consultation" method="post" class="mb-5" onsubmit="addTimeStamp()">
+            <!-- Doctor Selection -->
             <div class="form-group">
-                <label for="consultation_id">Select a Doctor:</label>
-                <select id="consultation_id" name="consultation_id" class="form-control" required>
+                <label for="consultation_id" class="form-label">Choose Your Doctor:</label>
+                <div id="doctors-list">
                     {% for doctor in doctors %}
-                        <option value="{{ doctor.id }}">{{ doctor.name }} - {{ doctor.specialty }} - Rs.{{ doctor.consultation_fee }}</option>
+                    <div class="doctor-card">
+                        <img src="{{ doctor.photo_url }}" alt="Doctor Photo" class="doctor-photo">
+                        <div class="doctor-info">
+                            <strong>{{ doctor.name }}</strong><br>
+                            <small>{{ doctor.specialty }}</small><br>
+                            <small class="rating">Rating: &#9733; {{ doctor.rating }} / 5</small><br>
+                            <small>Status: {{ doctor.doctors_status }}</small><br>
+                            <small>Fee: {{ doctor.consultation_fee }}</small>
+                        </div>
+                        <div>
+                            <input type="radio" id="doctor{{ doctor.id }}" name="consultation_id" value="{{ doctor.id }}" required>
+                        </div>
+                    </div>
                     {% endfor %}
-                </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="consultation_date">Date:</label>
-                <input type="date" id="consultation_date" name="date" class="form-control" required>
+
+            <!-- Date and Time Selection -->
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="consultation_date" class="form-label">Select Date:</label>
+                    <input type="date" id="consultation_date" name="date" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="consultation_time" class="form-label">Select Time:</label>
+                    <input type="time" id="consultation_time" name="time" class="form-control" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="consultation_time">Time:</label>
-                <input type="time" id="consultation_time" name="time" class="form-control" required>
-            </div>
+
             <!-- Hidden input field to store the current timestamp -->
             <input type="hidden" id="timestamp" name="timestamp">
-            <button type="submit" class="btn btn-primary">Book Consultation</button>
+            <button type="submit" class="btn btn-primary">Schedule Consultation</button>
         </form>
     </div>
 
@@ -86,5 +146,9 @@
             });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
+```
