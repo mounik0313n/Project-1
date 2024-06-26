@@ -1,6 +1,7 @@
-CREATE DATABASE medicaldelivery;
-USE medicaldelivery;
+create database medicaldelivery1;
 
+use medicaldelivery1;
+-- Users table
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -14,12 +15,14 @@ CREATE TABLE users (
     postalcode VARCHAR(20) NOT NULL
 );
 
+-- Medicines table
 CREATE TABLE medicines (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     price DECIMAL(10, 2) NOT NULL
 );
 
+-- Cart table
 CREATE TABLE cart (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -29,6 +32,7 @@ CREATE TABLE cart (
     FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE CASCADE
 );
 
+-- Orders table
 CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -40,6 +44,7 @@ CREATE TABLE orders (
     FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE CASCADE
 );
 
+-- Lab Tests table
 CREATE TABLE lab_tests (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -47,6 +52,7 @@ CREATE TABLE lab_tests (
     price DECIMAL(10, 2) NOT NULL
 );
 
+-- User Lab Tests table
 CREATE TABLE user_lab_tests (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -57,24 +63,70 @@ CREATE TABLE user_lab_tests (
     FOREIGN KEY (lab_test_id) REFERENCES lab_tests(id) ON DELETE CASCADE
 );
 
-CREATE TABLE doctors (
+
+
+-- Create the doctors table
+CREATE TABLE IF NOT EXISTS doctors (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     specialty VARCHAR(100) NOT NULL,
-    consultation_fee INT NOT NULL
+    consultation_fee INT NOT NULL,
+    doctors_status VARCHAR(255) NOT NULL,
+    doctors_password VARCHAR(255) NOT NULL
 );
+ALTER TABLE doctors
+ADD COLUMN doctors_status VARCHAR(255) NOT NULL;
 
+
+
+
+-- Insert sample data into doctors table
+INSERT INTO doctors (name, specialty, consultation_fee) VALUES 
+('Dr. John Smith', 'Cardiology', 150),
+('Dr. Jane Doe', 'Dermatology', 100),
+('Dr. Alice Brown', 'Pediatrics', 120);
+
+
+-- Consultations table
 CREATE TABLE consultations (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     doctor_id INT NOT NULL,
     consultation_date DATE NOT NULL,
+    doctor_name varchar,
     notes TEXT,
     consultation_fee INT NOT NULL,
     consultation_time TIME NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE
+    FOREIGN KEY (name) REFERENCES doctors(name) ON DELETE CASCADE
 );
+
+-- 
+CREATE TABLE consultations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    doctor_id INT NOT NULL,
+    doctor_name VARCHAR(100) NOT NULL,
+    consultation_date DATE NOT NULL,
+    notes TEXT,
+    consultation_fee INT NOT NULL,
+    consultation_time TIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_name) REFERENCES doctors(name) ON DELETE CASCADE
+);
+
+
+DROP table doctors;
+INSERT INTO consultations (user_id, doctor_id, consultation_date, notes, consultation_fee, consultation_time)
+SELECT 1, id, '2024-06-21', 'Routine check-up', consultation_fee, '10:00:00'
+FROM doctors
+WHERE id = 1;
+
+select * from doctors;
+SHOW TABLES;
+
 
 
 INSERT INTO medicines (name, price) VALUES 
@@ -85,27 +137,33 @@ INSERT INTO medicines (name, price) VALUES
 ('Cough Syrup', 4.50),
 ('Antacid', 2.50),
 ('Vitamin C', 3.00),
-('Insulin', 5.00),
-('Hydrochlorothiazide', 50.00),
-('Prednisone', 70.00),
-('Losartan', 55.00),
-('Levothyroxine', 65.00),
-('Atorvastatin', 80.00),
-('Clopidogrel', 45.00),
-('Fluoxetine', 90.00),
-('Warfarin', 85.00),
-('Simvastatin', 75.00),
-('Montelukast', 60.00),
-('Loratadine', 25.00),
-('Metoprolol', 40.00),
-('Furosemide', 50.00),
-('Gabapentin', 85.00),
-('Tramadol', 95.00),
-('Citalopram', 70.00),
-('Azithromycin', 120.00),
-('Doxycycline', 110.00),
-('Escitalopram', 105.00),
-('Albuterol', 130.00);
+('Insulin', 5.00); 
+
+
+INSERT INTO medicines (name, price)
+VALUES ('Hydrochlorothiazide', 50.00),
+       ('Prednisone', 70.00),
+       ('Losartan', 55.00),
+       ('Levothyroxine', 65.00),
+       ('Atorvastatin', 80.00),
+       ('Clopidogrel', 45.00),
+       ('Fluoxetine', 90.00),
+       ('Warfarin', 85.00),
+       ('Simvastatin', 75.00),
+       ('Montelukast', 60.00),
+       ('Loratadine', 25.00),
+       ('Metoprolol', 40.00),
+       ('Furosemide', 50.00),
+       ('Gabapentin', 85.00),
+       ('Tramadol', 95.00),
+       ('Citalopram', 70.00),
+       ('Azithromycin', 120.00),
+       ('Doxycycline', 110.00),
+       ('Escitalopram', 105.00),
+       ('Albuterol', 130.00);
+       
+       
+       
 INSERT INTO lab_tests (name, description, price) VALUES 
 ('Complete Blood Count (CBC)', 'A test used to evaluate your overall health and detect a variety of disorders, including anemia, infection, and leukemia.', 50.00),
 ('Lipid Profile', 'A panel of blood tests that serves as an initial broad medical screening tool for abnormalities in lipids, such as cholesterol and triglycerides.', 75.00),
@@ -114,54 +172,61 @@ INSERT INTO lab_tests (name, description, price) VALUES
 ('Thyroid Function Test (TFT)', 'A collective term for blood tests used to check the function of the thyroid.', 80.00),
 ('Blood Glucose Test', 'A test that measures the amount of glucose (sugar) in your blood.', 40.00);
 
-INSERT INTO doctors (name, specialty, consultation_fee)
-VALUES
-    ('Dr. Anil Mehta', 'Cardiology', 1500),
-    ('Dr. Priya Sharma', 'Neurology', 1800),
-    ('Dr. Rajesh Kapoor', 'Orthopedics', 1200),
-    ('Dr. Sunita Verma', 'Dermatology', 1000),
-    ('Dr. Vikram Singh', 'Pediatrics', 800),
-    ('Dr. Ayesha Khan', 'Gynecology', 1300),
-    ('Dr. Arjun Gupta', 'ENT', 900),
-    ('Dr. Ramesh Rao', 'Ophthalmology', 1100),
-    ('Dr. Neha Jain', 'Endocrinology', 1600),
-    ('Dr. Mohit Chawla', 'Urology', 1400),
-    ('Dr. Kavita Patel', 'Psychiatry', 1700),
-    ('Dr. Rahul Sinha', 'Gastroenterology', 1500),
-    ('Dr. Preeti Agarwal', 'Pulmonology', 1200),
-    ('Dr. Suresh Iyer', 'Nephrology', 1600),
-    ('Dr. Anjali Bhatt', 'Oncology', 2000),
-    ('Dr. Sanjay Desai', 'Cardiology', 1600),
-    ('Dr. Manisha Roy', 'Neurology', 1700),
-    ('Dr. Abhishek Mukherjee', 'Orthopedics', 1100),
-    ('Dr. Shalini Rao', 'Dermatology', 900),
-    ('Dr. Vishal Tyagi', 'Pediatrics', 850),
-    ('Dr. Ritu Gupta', 'Gynecology', 1250),
-    ('Dr. Aniruddh Bose', 'ENT', 950),
-    ('Dr. Megha Narang', 'Ophthalmology', 1150),
-    ('Dr. Sneha Patel', 'Endocrinology', 1550),
-    ('Dr. Kunal Thakkar', 'Urology', 1450),
-    ('Dr. Parvati Rao', 'Psychiatry', 1750),
-    ('Dr. Siddharth Nair', 'Gastroenterology', 1400),
-    ('Dr. Arpita Singh', 'Pulmonology', 1300),
-    ('Dr. Vivek Menon', 'Nephrology', 1650),
-    ('Dr. Aparna Joshi', 'Oncology', 2100),
-    ('Dr. Hitesh Malhotra', 'Cardiology', 1500),
-    ('Dr. Nandini Das', 'Neurology', 1800),
-    ('Dr. Prashant Reddy', 'Orthopedics', 1200),
-    ('Dr. Anjana Ghosh', 'Dermatology', 1000),
-    ('Dr. Rajiv Bansal', 'Pediatrics', 800),
-    ('Dr. Savita Kapoor', 'Gynecology', 1300),
-    ('Dr. Deepak Sharma', 'ENT', 900),
-    ('Dr. Ritika Sen', 'Ophthalmology', 1100),
-    ('Dr. Vikas Gupta', 'Endocrinology', 1600),
-    ('Dr. Neeraj Agarwal', 'Urology', 1400),
-    ('Dr. Pallavi Mehta', 'Psychiatry', 1700),
-    ('Dr. Rohit Sinha', 'Gastroenterology', 1500),
-    ('Dr. Sunil Kumar', 'Pulmonology', 1200),
-    ('Dr. Aarti Patel', 'Nephrology', 1600),
-    ('Dr. Rajesh Gupta', 'Oncology', 2000);
+       
+INSERT INTO doctors (name, specialty) VALUES 
+('Dr. John Doe', 'Cardiologist'),
+('Dr. Jane Smith', 'Dermatologist'),
+('Dr. Emily Johnson', 'General Physician'),
+('Dr. Michael Brown', 'Pediatrician'),
+('Dr. William Davis', 'Orthopedic Surgeon'),
+('Dr. Linda Martinez', 'Gynecologist'); 
+select *from doctors;
+ALTER TABLE doctors
+ADD COLUMN doctor_status VARCHAR(20) NOT NULL DEFAULT 'Available';
 
+ALTER TABLE doctors
+MODIFY COLUMN doctor_status VARCHAR(255) NOT NULL DEFAULT 'Available';
+
+ALTER TABLE doctors
+MODIFY COLUMN doctors_status VARCHAR(20) DEFAULT 'active';
+
+
+ALTER TABLE doctors
+DROP COLUMN doctors_password;
+
+DROP TABLE consultations;
+
+-- Disable safe update mode
+SET SQL_SAFE_UPDATES = 0;
+
+-- Check if the consultation_fee column exists, and add it if it doesn't
+ALTER TABLE doctors
+ADD COLUMN IF NOT EXISTS consultation_fee INT NOT NULL;
+
+-- Insert sample data into doctors table if not already present
+INSERT INTO doctors (name, specialty, consultation_fee)
+SELECT * FROM (SELECT 'Dr. John Smith', 'Cardiology', 150) AS tmp
+WHERE NOT EXISTS (
+    SELECT name FROM doctors WHERE name = 'Dr. John Smith' AND specialty = 'Cardiology' AND consultation_fee = 150
+) LIMIT 1;
+
+INSERT INTO doctors (name, specialty, consultation_fee)
+SELECT * FROM (SELECT 'Dr. Jane Doe', 'Dermatology', 100) AS tmp
+WHERE NOT EXISTS (
+    SELECT name FROM doctors WHERE name = 'Dr. Jane Doe' AND specialty = 'Dermatology' AND consultation_fee = 100
+) LIMIT 1;
+
+INSERT INTO doctors (name, specialty, consultation_fee)
+SELECT * FROM (SELECT 'Dr. Alice Brown', 'Pediatrics', 120) AS tmp
+WHERE NOT EXISTS (
+    SELECT name FROM doctors WHERE name = 'Dr. Alice Brown' AND specialty = 'Pediatrics' AND consultation_fee = 120
+) LIMIT 1;
+
+-- Insert a new consultation using the consultation_fee from the doctors table
+INSERT INTO consultations (user_id, doctor_id, consultation_date, notes, consultation_fee, consultation_time)
+SELECT 1, id, '2024-06-21', 'Routine check-up', consultation_fee, '10:00:00'
+FROM doctors
+WHERE id = 1;
 
 CREATE TABLE lab_tests1(
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -235,3 +300,34 @@ INSERT INTO lab_tests1 (category, test_name) VALUES
 ('Neurology', 'Electroencephalogram (EEG)'),
 ('Neurology', 'Nerve Conduction Studies');
 
+CREATE TABLE doctors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    specialty VARCHAR(100) NOT NULL,
+    consultation_fee INT NOT NULL,
+    doctors_status VARCHAR(255) NOT NULL,
+    doctors_password VARCHAR(255) NOT NULL,
+    INDEX idx_name (name)  -- Add an index on the name column
+);
+
+CREATE TABLE consultations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    doctor_id INT NOT NULL,
+    doctor_name VARCHAR(100) NOT NULL,
+    consultation_date DATE NOT NULL,
+    notes TEXT,
+    consultation_fee INT NOT NULL,
+    consultation_time TIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_name) REFERENCES doctors(name) ON DELETE CASCADE
+);
+INSERT INTO doctors (name, specialty, consultation_fee, doctors_status, doctors_password)
+VALUES
+('Dr. Ravi Kumar', 'Cardiologist', 500, 'Active', 'password123'),
+('Dr. Priya Sharma', 'Dermatologist', 400, 'Active', 'securepass'),
+('Dr. Rajesh Singh', 'Pediatrician', 300, 'Active', 'letmein');
+
+ALTER TABLE consultations
+MODIFY COLUMN doctor_name VARCHAR(100) DEFAULT NULL;

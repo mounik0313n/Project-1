@@ -4,7 +4,11 @@ import MySQLdb.cursors
 import re
 import google.generativeai as genai
 
-API_KEY = 'AIzaSyCCrYnLhDIgToWeG4u_nPpQcB9uNJMze0U'
+
+
+
+API_KEY = 'AIzaSyCnHiPnc81WluNjSklL6lLR5FO_NbHRCfM'
+#'AIzaSyCCrYnLhDIgToWeG4u_nPpQcB9uNJMze0U'
 genai.configure(api_key=API_KEY)
 
 model = genai.GenerativeModel('gemini-pro')
@@ -42,14 +46,19 @@ medical_keywords = [
     'PCR test', 'MRI scan', 'CT scan', 'X-ray', 'ultrasound'
 ]
 
+
+
+
+
+
 app = Flask(__name__)
 
 app.secret_key = 'your_secret_key'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'pramod2805'
-app.config['MYSQL_DB'] = 'medicaldelivery5'
+app.config['MYSQL_PASSWORD'] = '12345678'
+app.config['MYSQL_DB'] = 'medicaldelivery1'
 
 mysql = MySQL(app)
 
@@ -117,6 +126,15 @@ def index():
     if 'loggedin' in session:
         return render_template('index.html')
     return redirect(url_for('login'))
+
+
+
+
+
+
+
+
+
 
 @app.route('/display')
 def display():
@@ -306,11 +324,25 @@ def add_doctor():
         name = request.form['name']
         specialty = request.form['specialty']
         consultation_fee = request.form['consultation_fee']
+        doctor_status = request.form.get('doctor_status', 'Available')  # Default to 'Available' if not provided
+        
+        # Validate form data
+        if not (name and specialty and consultation_fee):
+            flash('Please fill out all required fields.', 'error')
+            return redirect(url_for('admin_dashboard'))
+        
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('INSERT INTO doctors (name, specialty, consultation_fee) VALUES (%s, %s, %s)', (name, specialty, consultation_fee))
+        cursor.execute('INSERT INTO doctors (name, specialty, consultation_fee, doctors_status) VALUES (%s, %s, %s, %s)',
+                       (name, specialty, consultation_fee, doctor_status))
         mysql.connection.commit()
+        cursor.close()  # Close the cursor
+        
+        flash('Doctor added successfully!', 'success')
         return redirect(url_for('admin_dashboard'))
+    
     return redirect(url_for('login'))
+
+
 
 @app.route('/delete_doctor/<int:id>', methods=['POST'])
 def delete_doctor(id):
@@ -607,11 +639,17 @@ def neurological_tests():
     return redirect(url_for('login'))
 
 
+
+
+
+
+
 @app.route('/lab_tests')
 def lab_tests():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         
+        # Fetch lab tests
         cursor.execute('SELECT * FROM lab_tests')
         lab_tests = cursor.fetchall()
         
@@ -622,7 +660,6 @@ def lab_tests():
 
 from flask import flash
 
-
 @app.route('/book_consultation', methods=['POST'])
 def book_consultation():
     if 'loggedin' in session:
@@ -631,14 +668,17 @@ def book_consultation():
         consultation_time = request.form['time']
         
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT consultation_fee FROM doctors WHERE id = %s', (doctor_id,))
+        
+        # Corrected SQL query to fetch consultation_fee and name
+        cursor.execute('SELECT consultation_fee, name FROM doctors WHERE id = %s', (doctor_id,))
         doctor = cursor.fetchone()
         
         if doctor:
             consultation_fee = doctor['consultation_fee']
+            doctor_name = doctor['name']
             
-            cursor.execute('INSERT INTO consultations (user_id, doctor_id, consultation_date, consultation_time, consultation_fee) VALUES (%s, %s, %s, %s, %s)', 
-                           (session['id'], doctor_id, consultation_date, consultation_time, consultation_fee))
+            cursor.execute('INSERT INTO consultations (user_id, doctor_id, doctor_name, consultation_date, consultation_time, consultation_fee) VALUES (%s, %s, %s, %s, %s, %s)', 
+                           (session['id'], doctor_id, doctor_name, consultation_date, consultation_time, consultation_fee))
             mysql.connection.commit()
             
             flash('Consultation booked successfully', 'success')
@@ -646,9 +686,10 @@ def book_consultation():
             flash('Doctor not found', 'error')
         
         cursor.close()
-        return redirect(url_for('index'))
-    
-    return redirect(url_for('login'))
+        return redirect(url_for('index'))  # Redirect to index after processing
+        
+    return redirect(url_for('login'))  # Redirect to login if not logged in
+
 
 
 
@@ -669,7 +710,7 @@ def past_consultations():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('''
-            SELECT c.id, c.doctor_id, c.consultation_date, c.consultation_time, c.consultation_fee
+            SELECT c.id, c.doctor_id, d.name AS doctor_name, c.consultation_date, c.consultation_time, c.consultation_fee
             FROM consultations c
             JOIN doctors d ON c.doctor_id = d.id
             WHERE c.user_id = %s
@@ -677,6 +718,7 @@ def past_consultations():
         consultations = cursor.fetchall()
         return render_template('past_consultations.html', consultations=consultations)
     return redirect(url_for('login'))
+
 
 @app.route('/past_lab_bookings')
 def past_lab_bookings():
@@ -708,6 +750,12 @@ def ask():
 
 def is_medical_query(query):
     return any(keyword in query.lower() for keyword in medical_keywords)
+# Route to handle the user's question
+
+
+
+
+
 
 if __name__ == '__main__':
-    app.run(debug=True,port=6801)
+    app.run(debug=True,port=6803)
