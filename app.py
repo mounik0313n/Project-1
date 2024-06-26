@@ -3,6 +3,24 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 import google.generativeai as genai
+# from google.generativeai import get_chat_response
+
+
+
+
+from sklearn.linear_model import LinearRegression
+import pandas as pd
+import numpy as np
+
+csv_path = 'diabetes.csv'  
+data = pd.read_csv(csv_path)
+
+X = data[['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']]
+y = data['Outcome']
+X = X.to_numpy()
+
+model1 = LinearRegression()
+model1.fit(X, y)
 
 
 
@@ -57,8 +75,8 @@ app.secret_key = 'your_secret_key'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '12345678'
-app.config['MYSQL_DB'] = 'medicaldelivery1'
+app.config['MYSQL_PASSWORD'] = 'Sudheer@123'
+app.config['MYSQL_DB'] = 'medicaldelivery101'
 
 mysql = MySQL(app)
 
@@ -131,9 +149,14 @@ def index():
 
 
 
-
-
-
+@app.route('/ml', methods=['GET', 'POST'])
+def homee():
+    if request.method == 'POST':
+        inputs = [float(request.form[field]) for field in ['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']]
+        prediction = model1.predict([inputs])
+        output = "Diabetic" if prediction[0] >= 0.5 else "Not Diabetic"
+        return render_template('index1.html', prediction_text=f'The person is {output}')
+    return render_template('index1.html')
 
 
 @app.route('/display')
@@ -758,4 +781,4 @@ def is_medical_query(query):
 
 
 if __name__ == '__main__':
-    app.run(debug=True,port=6803)
+    app.run(debug=True,port=6999)
