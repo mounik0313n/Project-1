@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        h1 {
+            color: #006400; 
+            margin-top: 50px; 
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        li {
+            padding: 10px;
+            background-color: #ffffff; 
+            border-radius: 5px; 
+            margin-bottom: 10px; 
+            color: #333; 
+        }
+    </style>
+    <title>Tests Available at Pincode: {{ pincode }}</title>
+</head>
+<body>
+    <h1>Tests Available at Pincode: {{ pincode }}</h1>
+    <ul>
+        {% for test in tests %}
+            <li>{{ test }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

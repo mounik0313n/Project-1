@@ -1,17 +1,60 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Past Lab Bookings</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f1e4fc; 
+        }
+        .header {
+            background-color: #6a1b9a; 
+            color: #fff; 
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #6a1b9a; 
+        }
+        .table thead th {
+            background-color: #6a1b9a; 
+            color: #fff;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f8f9fa; 
+        }
+        .table tbody tr:nth-child(odd) {
+            background-color: #fff; 
+        }
+        .table tbody tr:hover {
+            background-color: #fdd835; 
+        }
+        .table td {
+            color: #6a1b9a; 
+        }
+        .container {
+            margin-top: 30px;
+            background-color: #fff; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
+    <div class="header">
+        <p>Welcome to the Past Lab Bookings section. Here you can review all your past lab tests.</p>
+    </div>
     <div class="container">
         <h1 class="mt-5">Past Lab Bookings</h1>
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Lab Test</th>
+                    <th>Lab Test ID</th>
+                    <th>Lab Test Name</th>
                     <th>Date</th>
                     <th>Results</th>
                 </tr>
@@ -20,8 +63,9 @@
                 {% for lab_booking in lab_bookings %}
                 <tr>
                     <td>{{ lab_booking.lab_test_id }}</td>
+                    <td>{{ lab_booking.lab_test_name }}</td>
                     <td>{{ lab_booking.date }}</td>
-                    <td>{{ lab_booking.results}}</td>
+                    <td>{{ lab_booking.results }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
