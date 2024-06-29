@@ -1,6 +1,6 @@
-CREATE DATABASE medicaldelivery101;
+CREATE DATABASE medicaldelivery103;
 
-USE medicaldelivery101;
+USE medicaldelivery103;
 -- Users table
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,

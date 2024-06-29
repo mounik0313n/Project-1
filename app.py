@@ -5,6 +5,19 @@ import re
 import google.generativeai as genai
 # from google.generativeai import get_chat_response
 
+from flask_mail import Mail, Message
+
+
+app = Flask(__name__)
+
+app.config['MAIL_SERVER'] = 'smtp.outlook.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'sudheerdata@outlook.com'
+app.config['MAIL_PASSWORD'] = 'Sudheer@123'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+mail = Mail(app)
+
 
 
 
@@ -70,14 +83,13 @@ medical_keywords = [
 
 
 
-app = Flask(__name__)
 
 app.secret_key = 'your_secret_key'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'pramod2805'
-app.config['MYSQL_DB'] = 'medicaldelivery101'
+app.config['MYSQL_PASSWORD'] = 'Sudheer@123'
+app.config['MYSQL_DB'] = 'medicaldelivery103'
 
 mysql = MySQL(app)
 
@@ -95,6 +107,7 @@ def login():
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
+            session['mail']=account['email']
             if username == 'admin':
                 return redirect(url_for('admin_dashboard'))
             else:
@@ -229,15 +242,21 @@ def add_to_cart(medicine_id):
 def cart():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('''
+        cursor.execute("""
             SELECT cart.id AS cart_id, medicines.id AS id, medicines.name, medicines.price, cart.quantity 
             FROM cart 
             JOIN medicines ON cart.medicine_id = medicines.id 
             WHERE cart.user_id = %s
-        ''', (session['id'],))
+        """, (session['id'],))
         cart_items = cursor.fetchall()
         return render_template('cart.html', cart_items=cart_items)
     return redirect(url_for('login'))
+
+
+
+
+
+
 
 @app.route('/update_cart', methods=['POST'])
 def update_cart():
@@ -288,17 +307,60 @@ def order_tracking():
         return render_template('order_tracking.html', orders=orders)
     return redirect(url_for('login'))
 
-@app.route('/checkout')
+
+
+@app.route('/sendemail', methods=['GET', 'POST'])
+def sendemail():
+    if request.method == 'POST':
+        email = request.form['email']
+        message_body = request.form['message']
+        message = Message('Mail from Medical Delivery System', sender='MED24', recipients=[email])
+        message.body = message_body
+        mail.send(message)
+        return 'Mail sent successfully!'
+    return render_template('sendemail.html')
+
+
+
+
+
+@app.route('/checkout', methods=['POST'])
 def checkout():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('''
-            INSERT INTO orders (user_id, medicine_id) 
-            SELECT user_id, medicine_id FROM cart WHERE user_id = %s
-        ''', (session['id'],))
+        cursor.execute("""
+            SELECT medicines.name, cart.quantity, medicines.price,medicines.id 
+            FROM cart 
+            JOIN medicines ON cart.medicine_id = medicines.id 
+            WHERE cart.user_id = %s
+        """, (session['id'],))
+        cart_items = cursor.fetchall()
+        
+        email = session.get('email')
+        if not email:
+            cursor.execute('SELECT email FROM users WHERE id = %s', (session['id'],))
+            user = cursor.fetchone()
+            email = user['email']
+
+        message_body = 'Thank you for your order. Here are the details:\n\n'
+        for item in cart_items:
+            message_body += f"{item['name']} - Quantity: {item['quantity']} - Price: ₹{item['price'] * item['quantity']}\n"
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('''
+            INSERT INTO orders (user_id, medicine_id,quantity) 
+            values (%s,%s,%s)''',(session['id'],item['id'],item['quantity'],))
+
+        
+        message = Message('Order Confirmation', sender='sudheerdata@outlook.com', recipients=[email])
+        message.body = message_body
+        mail.send(message)
+
+        
+        
         cursor.execute('DELETE FROM cart WHERE user_id = %s', (session['id'],))
         mysql.connection.commit()
-        return redirect(url_for('orders'))
+        
+        return redirect(url_for('index'))
     return redirect(url_for('login'))
 
 
@@ -813,4 +875,4 @@ def is_medical_query(query):
 
 
 if __name__ == '__main__':
-    app.run(debug=True,port=6999)
+    app.run(debug=True,port=7001)
