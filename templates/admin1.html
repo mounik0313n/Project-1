@@ -1,0 +1,448 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .topbar {
+            background: #512DA8;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .med24 {
+            font-size: 32px;
+            font-weight: bold;
+            font-family: 'Arial Black', Gadget, sans-serif;
+            color: #FFC107;
+            text-transform: uppercase;
+        }
+        .current-time {
+            font-size: 16px;
+            background: #673AB7;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        nav {
+            margin: 0;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        nav ul li {
+            margin: 0;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #673AB7;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav ul li a:hover {
+            background: #9C27B0;
+        }
+        .welcome {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 28px;
+            color: #333;
+        }
+        .content {
+            width: 80%;
+            margin: 20px auto;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .contentbar {
+            background: #fff;
+            padding: 30px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .admin-section {
+            margin: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-section a {
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            padding: 15px;
+            background: #673AB7;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+            text-align: center;
+            font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            flex: 1;
+            margin-right: 10px;
+        }
+        .admin-section a:hover {
+            background: #512DA8;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+        .advanced-features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .feature-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin-right: 20px;
+        }
+        .feature-card h3 {
+            color: #512DA8;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .feature-card p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+    </style>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const dateTimeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+            document.getElementById('current-time').innerText = dateTimeString;
+        }
+
+        setInterval(updateTime, 1000);
+
+        function getWeather() {
+            navigator.geolocation.getCurrentPosition(position => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('location').innerText = `Lat: ${lat.toFixed(2)}, Lon: ${lon.toFixed(2)}`;
+                        document.getElementById('temperature').innerText = `${data.current_weather.temperature} °C`;
+                        document.getElementById('weather-condition').innerText = data.current_weather.weathercode;
+                    })
+                    .catch(error => console.error('Error fetching weather data:', error));
+            });
+        }
+
+        window.onload = function() {
+            updateTime();
+            getWeather();
+        };
+    </script>
+</head>
+<body>
+    <div class="topbar">
+        <div class="med24">MED24</div>
+        <div class="current-time" id="current-time"></div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="welcome">Welcome, Admin</div>
+    <div class="content">
+        <div class="contentbar">
+            <h2>Admin Dashboard</h2>
+            <div class="weather">
+                <div>
+                    <h3>Location</h3>
+                    <p id="location">Loading...</p>
+                </div>
+                <div>
+                    <h3>Temperature</h3>
+                    <p id="temperature">Loading...</p>
+                </div>
+                <div>
+                    <h3>Weather Condition</h3>
+                    <p id="weather-condition">Loading...</p>
+                </div>
+            </div>
+            <div class="admin-section">
+                <a href="/adminmed">Manage Medicines</a>
+                <a href="/adminord">Manage Orders</a>
+                <a href="/admindoct">Manage Doctors</a>
+                <a href="/adminlab">Manage Lab Tests</a>
+            </div>
+            <div class="advanced-features">
+                <div class="feature-card">
+                    <h3>Medicine Delivery Services</h3>
+                    <p>Integrate real-time tracking and notifications for medicine delivery, ensuring seamless updates to both admins and users.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Doctor Booking System</h3>
+                    <p>Implement a comprehensive booking system for doctor appointments, allowing users to schedule appointments with preferred doctors.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Lab Test Booking</h3>
+                    <p>Facilitate online booking and management of lab tests, including reporting and integration with healthcare providers for faster results.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .topbar {
+            background: #512DA8;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .med24 {
+            font-size: 32px;
+            font-weight: bold;
+            font-family: 'Arial Black', Gadget, sans-serif;
+            color: #FFC107;
+            text-transform: uppercase;
+        }
+        .current-time {
+            font-size: 16px;
+            background: #673AB7;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        nav {
+            margin: 0;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        nav ul li {
+            margin: 0;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #673AB7;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav ul li a:hover {
+            background: #9C27B0;
+        }
+        .welcome {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 28px;
+            color: #333;
+        }
+        .content {
+            width: 80%;
+            margin: 20px auto;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .contentbar {
+            background: #fff;
+            padding: 30px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .admin-section {
+            margin: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-section a {
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            padding: 15px;
+            background: #673AB7;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+            text-align: center;
+            font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            flex: 1;
+            margin-right: 10px;
+        }
+        .admin-section a:hover {
+            background: #512DA8;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+        .advanced-features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .feature-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin-right: 20px;
+        }
+        .feature-card h3 {
+            color: #512DA8;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .feature-card p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .weather {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+            background: #512DA8;
+            color: #fff;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        .weather div {
+            text-align: center;
+        }
+        .weather h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .weather p {
+            margin: 5px 0 0;
+            font-size: 18px;
+        }
+    </style>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const dateTimeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+            document.getElementById('current-time').innerText = dateTimeString;
+        }
+
+        setInterval(updateTime, 1000);
+
+        function getWeather() {
+            navigator.geolocation.getCurrentPosition(position => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('location').innerText = `Lat: ${lat.toFixed(2)}, Lon: ${lon.toFixed(2)}`;
+                        document.getElementById('temperature').innerText = `${data.current_weather.temperature} °C`;
+                        document.getElementById('weather-condition').innerText = data.current_weather.weathercode;
+                    })
+                    .catch(error => console.error('Error fetching weather data:', error));
+            });
+        }
+
+        window.onload = function() {
+            updateTime();
+            getWeather();
+        };
+    </script>
+</head>
+<body>
+    <div class="topbar">
+        <div class="med24">MED24</div>
+        <div class="current-time" id="current-time"></div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="welcome">Welcome, Admin</div>
+    <div class="content">
+        <div class="contentbar">
+            <h2>Admin Dashboard</h2>
+            <div class="weather">
+                <div>
+                    <h3>Location:</h3>
+                    <p id="location">Loading...</p>
+                </div>
+                <div>
+                    <h3>Temperature:</h3>
+                    <p id="temperature">Loading...</p>
+                </div>
+                <div>
+                    <h3>Weather Condition:</h3>
+                    <p id="weather-condition">Loading...</p>
+                </div>
+            </div>
+            <div class="admin-section">
+                <a href="/adminmed">Manage Medicines</a>
+                <a href="/adminord">Manage Orders</a>
+                <a href="/admindoct">Manage Doctors</a>
+                <a href="/adminlab">Manage Lab Tests</a>
+            </div>
+            <div class="advanced-features">
+                <div class="feature-card">
+                    <h3>Medicine Delivery Services</h3>
+                    <p>Integrate real-time tracking and notifications for medicine delivery, ensuring seamless updates to both admins and users.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Doctor Booking System</h3>
+                    <p>Implement a comprehensive booking system for doctor appointments, allowing users to schedule appointments with preferred doctors.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Lab Test Booking</h3>
+                    <p>Facilitate online booking and management of lab tests, including reporting and integration with healthcare providers for faster results.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

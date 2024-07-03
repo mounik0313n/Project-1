@@ -7,6 +7,8 @@ import google.generativeai as genai
 
 from flask_mail import Mail, Message
 
+from flask import current_app
+
 
 app = Flask(__name__)
 
@@ -93,6 +95,30 @@ app.config['MYSQL_DB'] = 'medicaldelivery103'
 
 mysql = MySQL(app)
 
+# @app.route('/')
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     msg = ''
+#     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+#         username = request.form['username']
+#         password = request.form['password']
+#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+#         cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password,))
+#         account = cursor.fetchone()
+#         if account:
+#             session['loggedin'] = True
+#             session['id'] = account['id']
+#             session['username'] = account['username']
+#             session['mail']=account['email']
+#             if username == 'admin':
+#                 return redirect(url_for('admin_home'))
+#             else:
+#                 return redirect(url_for('index'))
+#         else:
+#             msg = 'Incorrect username/password!'
+#     return render_template('login.html', msg=msg)
+
+
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -107,9 +133,9 @@ def login():
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
-            session['mail']=account['email']
+            session['mail'] = account['email']
             if username == 'admin':
-                return redirect(url_for('admin_dashboard'))
+                return render_template('admin1.html')
             else:
                 return redirect(url_for('index'))
         else:
@@ -364,24 +390,25 @@ def checkout():
     return redirect(url_for('login'))
 
 
-@app.route('/admin')
-def admin_dashboard():
+
+
+@app.route('/admin_home')
+def admin_home():
+    if 'loggedin' in session and session['username'] == 'admin':
+        return render_template('admin1.html')
+    return redirect(url_for('login'))
+
+
+
+
+
+@app.route('/adminmed')
+def admin_medicines():
     if 'loggedin' in session and session['username'] == 'admin':
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM medicines')
         medicines = cursor.fetchall()
-        cursor.execute('''
-            SELECT orders.id, medicines.name AS medicine_name, users.username, medicines.price, orders.status 
-            FROM orders 
-            JOIN medicines ON orders.medicine_id = medicines.id 
-            JOIN users ON orders.user_id = users.id
-        ''')
-        orders = cursor.fetchall()
-        cursor.execute('SELECT * FROM doctors')
-        doctors = cursor.fetchall()
-        cursor.execute('SELECT * FROM lab_tests')
-        lab_tests = cursor.fetchall()
-        return render_template('admin.html', medicines=medicines, orders=orders, doctors=doctors, lab_tests=lab_tests)
+        return render_template('adminmed.html', medicines=medicines)
     return redirect(url_for('login'))
 
 @app.route('/add_medicine', methods=['POST'])
@@ -392,7 +419,7 @@ def add_medicine():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('INSERT INTO medicines (name, price) VALUES (%s, %s)', (name, price))
         mysql.connection.commit()
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_medicines'))
     return redirect(url_for('login'))
 
 @app.route('/delete_medicine/<int:medicine_id>', methods=['POST'])
@@ -401,7 +428,16 @@ def delete_medicine(medicine_id):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('DELETE FROM medicines WHERE id = %s', (medicine_id,))
         mysql.connection.commit()
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_medicines'))
+    return redirect(url_for('login'))
+
+@app.route('/admindoct')
+def admin_doctors():
+    if 'loggedin' in session and session['username'] == 'admin':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM doctors')
+        doctors = cursor.fetchall()
+        return render_template('admindoct.html', doctors=doctors)
     return redirect(url_for('login'))
 
 @app.route('/add_doctor', methods=['POST'])
@@ -410,44 +446,61 @@ def add_doctor():
         name = request.form['name']
         specialty = request.form['specialty']
         consultation_fee = request.form['consultation_fee']
-        doctor_status = request.form.get('doctor_status', 'Available')  # Default to 'Available' if not provided
+        doctor_status = request.form['doctors_status']
         
         if not (name and specialty and consultation_fee):
             flash('Please fill out all required fields.', 'error')
-            return redirect(url_for('admin_dashboard'))
+            return redirect(url_for('admin_doctors'))
         
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('INSERT INTO doctors (name, specialty, consultation_fee, doctors_status) VALUES (%s, %s, %s, %s)',
                        (name, specialty, consultation_fee, doctor_status))
         mysql.connection.commit()
-        cursor.close()  # Close the cursor
+        cursor.close()
         
         flash('Doctor added successfully!', 'success')
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_doctors'))
     
     return redirect(url_for('login'))
 
 
-
-@app.route('/delete_doctor/<int:id>', methods=['POST'])
-def delete_doctor(id):
+@app.route('/delete_doctor/<int:doctor_id>', methods=['POST'])
+def delete_doctor(doctor_id):
     if 'loggedin' in session and session['username'] == 'admin':
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('DELETE FROM doctors WHERE id = %s', (id,))
+        cursor.execute('DELETE FROM doctors WHERE id = %s', (doctor_id,))
         mysql.connection.commit()
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_doctors'))
+    return redirect(url_for('login'))
+
+@app.route('/adminlab')
+def admin_lab_tests():
+    if 'loggedin' in session and session['username'] == 'admin':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM lab_tests')
+        lab_tests = cursor.fetchall()
+        return render_template('adminlab.html', lab_tests=lab_tests)
     return redirect(url_for('login'))
 
 @app.route('/add_lab_test', methods=['POST'])
 def add_lab_test():
     if 'loggedin' in session and session['username'] == 'admin':
         name = request.form['name']
-        price = request.form['price']
         description = request.form['description']
+        price = request.form['price']
+        
+        if not (name and description and price):
+            flash('Please fill out all required fields.', 'error')
+            return redirect(url_for('admin_lab_tests'))
+        
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('INSERT INTO lab_tests (name, description, price) VALUES (%s, %s, %s)', (name, description, price))
         mysql.connection.commit()
-        return redirect(url_for('admin_dashboard'))
+        cursor.close()
+        
+        flash('Lab Test added successfully!', 'success')
+        return redirect(url_for('admin_lab_tests'))
+    
     return redirect(url_for('login'))
 
 @app.route('/delete_lab_test/<int:lab_test_id>', methods=['POST'])
@@ -456,7 +509,21 @@ def delete_lab_test(lab_test_id):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('DELETE FROM lab_tests WHERE id = %s', (lab_test_id,))
         mysql.connection.commit()
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_lab_tests'))
+    return redirect(url_for('login'))
+
+@app.route('/adminord')
+def admin_orders():
+    if 'loggedin' in session and session['username'] == 'admin':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('''
+            SELECT orders.id, medicines.name AS medicine_name, users.username, medicines.price, orders.status 
+            FROM orders 
+            JOIN medicines ON orders.medicine_id = medicines.id 
+            JOIN users ON orders.user_id = users.id
+        ''')
+        orders = cursor.fetchall()
+        return render_template('adminord.html', orders=orders)
     return redirect(url_for('login'))
 
 @app.route('/update_order/<int:order_id>', methods=['POST'])
@@ -466,10 +533,10 @@ def update_order(order_id):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('UPDATE orders SET status = %s WHERE id = %s', (status, order_id))
         mysql.connection.commit()
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_orders'))
     return redirect(url_for('login'))
 
-
+ 
 
 
 @app.route('/consultation1')
@@ -875,4 +942,4 @@ def is_medical_query(query):
 
 
 if __name__ == '__main__':
-    app.run(debug=True,port=7001)
+    app.run(debug=True,port=7003)

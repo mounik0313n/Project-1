@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,8 +69,13 @@
             font-size: 28px;
             color: #333;
         }
+        .welcome h1 {
+            color: #512DA8;
+            font-size: 36px;
+            text-transform: uppercase;
+        }
         .content {
-            width: 60%;
+            width: 80%;
             margin: 20px auto;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -80,6 +86,7 @@
             padding: 30px;
             border-bottom-left-radius: 8px;
             border-bottom-right-radius: 8px;
+            height: auto;
         }
         .contentbar h2 {
             text-align: center;
@@ -110,6 +117,30 @@
         .cta-buttons a:hover {
             background: #E64A19;
         }
+        .advanced-features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .feature-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin-right: 20px;
+        }
+        .feature-card h3 {
+            color: #512DA8;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .feature-card p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -124,7 +155,6 @@
                 <li><a href="/update">Update Profile</a></li>
                 <li><a href="/order_tracking">Order Tracking</a></li>
                 <li><a href="/ml">ML</a></li>
-
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </nav>
@@ -144,6 +174,20 @@
                 <a href="/lab_tests1">Lab Tests</a>
                 <a href="/past_consultations">Past Doctor Consultations</a>
                 <a href="/past_lab_bookings">Past Lab Bookings</a>
+            </div>
+            <div class="advanced-features">
+                <div class="feature-card">
+                    <h3>Medicine Delivery Services</h3>
+                    <p>Integrate real-time tracking and notifications for medicine delivery, ensuring seamless updates to both admins and users.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Doctor Booking System</h3>
+                    <p>Implement a comprehensive booking system for doctor appointments, allowing users to schedule appointments with preferred doctors.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Lab Test Booking</h3>
+                    <p>Facilitate online booking and management of lab tests, including reporting and integration with healthcare providers for faster results.</p>
+                </div>
             </div>
         </div>
     </div>
